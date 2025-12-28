@@ -425,11 +425,12 @@ class LegTweaks(private val skeleton: HumanSkeleton) {
 		val leftOffset: Float = getFootOffset(leftFootRotation)
 		val rightOffset: Float = getFootOffset(rightFootRotation)
 		var avgOffset = 0f
+		//var avgOffset = 0f
 
 		// if there is no clipping, return
 		if (!isClipped(leftOffset, rightOffset)) return
 
-		// move the feet to their new positions
+		// move the feet to their new positions (knee positions are handled by solveLowerBody)
 		if (leftFootPosition.y
 			< floorLevel +
 			footLength *
@@ -850,6 +851,10 @@ class LegTweaks(private val skeleton: HumanSkeleton) {
 
 	// returns true if it is likely the user is standing
 	private fun isStanding(): Boolean {
+		// // NOTE: Disengagement disabled - floor clip now stays active during squatting
+		// currentDisengagementOffset = 0f
+		// return true
+
 		// if the hip is below the vertical cutoff, user is not standing
 		val cutoff = (
 			floorLevel +
@@ -864,8 +869,8 @@ class LegTweaks(private val skeleton: HumanSkeleton) {
 							(floorLevel - hipPosition.y) /
 								(floorLevel - cutoff)
 							)
-					) *
-					MAX_DISENGAGEMENT_OFFSET
+						) *
+						MAX_DISENGAGEMENT_OFFSET
 				)
 			return false
 		}

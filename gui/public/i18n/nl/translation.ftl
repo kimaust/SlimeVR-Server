@@ -354,7 +354,7 @@ tracker-rotation-back = Achterzijde
 tracker-rotation-back_left = Linksachter
 tracker-rotation-back_right = Rechtsachter
 tracker-rotation-custom = Aangepast
-tracker-rotation-overriden = (overschreven door montage reset)
+tracker-rotation-overriden = (overschreven: { $angle }°)
 
 ## Tracker information
 
@@ -551,7 +551,7 @@ settings-general-tracker_mechanics-drift_compensation-prediction-label = Voorspe
 settings-general-tracker_mechanics-drift_compensation_warning =
     <b>Waarschuwing:</b> Gebruik alleen driftcompensatie als je heel vaak
     moet resetten (elke ~5-10 minuten).
-    
+
     IMU's die vaak worden gereset, zijn onder ander:
     Joy-Cons, owoTrack en MPU's (zonder recente firmware).
 settings-general-tracker_mechanics-drift_compensation_warning-cancel = Annuleren
@@ -734,9 +734,9 @@ settings-general-interface-discord_presence-message =
 settings-interface-behavior-error_tracking = Foutverzameling via Sentry.io
 settings-interface-behavior-error_tracking-description_v2 =
     <h1>Geeft u toestemming voor het verzamelen van geanonimiseerde foutgegevens?</h1>
-    
+
     <b>We verzamelen geen persoonlijke informatie</b> zoals uw IP-adres of draadloze inloggegevens. SlimeVR hecht veel waarde aan uw privacy!
-    
+
     Om de beste gebruikerservaring te bieden, verzamelen we geanonimiseerde foutrapporten, prestatiestatistieken en informatie over het besturingssysteem. Dit helpt ons bij het detecteren van fouten en problemen met SlimeVR. Deze statistieken worden verzameld via Sentry.io.
 settings-interface-behavior-error_tracking-label = Stuur fouten naar de ontwikkelaars
 settings-interface-behavior-bvh_directory = Map om BVH-opnames op te slaan
@@ -938,20 +938,20 @@ onboarding-reset_tutorial-skip = Stap overslaan
 # Cares about multiline
 onboarding-reset_tutorial-0 =
     Tik { $taps } keer op de gemarkeerde tracker om de yaw-reset te activeren.
-    
+
     Hierdoor staan de trackers in dezelfde richting als je HMD.
 # Cares about multiline
 onboarding-reset_tutorial-1 =
     Tik { $taps } keer op de gemarkeerde tracker om een volledige reset uit te voeren.
-    
+
     Hiervoor moet je staan (i-pose). Er is een vertraging van 3 seconden (instelbaar) voordat het daadwerkelijk gebeurt.
     Hiermee wordt de positie en rotatie van al je trackers volledig gereset. Dit zou de meeste problemen moeten oplossen.
 # Cares about multiline
 onboarding-reset_tutorial-2 =
     Tik { $taps } keer op de gemarkeerde tracker om de montage opnieuw in te stellen.
-    
+
     Montage-reset helpt bij hoe de trackers daadwerkelijk op je worden geplaatst, dus als je ze per ongeluk hebt verplaatst en de oriëntatie ervan voor een groot deel hebt veranderd, zal dit helpen.
-    
+
     Je moet in een houding staan alsof je aan het skiën bent, zoals wordt weergegeven in de Automatische montage wizard, je hebt een vertraging van 3 seconden (instelbaar) voordat deze wordt geactiveerd.
 
 ## Setup start
@@ -1430,7 +1430,7 @@ tray_or_exit_modal-title = Wat is de actie van de sluitknop?
 # Multiline text
 tray_or_exit_modal-description =
     Hiermee kun je kiezen wat er gebeurt als je op de sluitknop klikt: het programma afsluiten of minimaliseren naar het systeemvak.
-    
+
     Deze instelling kun je later altijd nog wijzigen in de interface instellingen!
 tray_or_exit_modal-radio-exit = Afsluiten bij sluiten
 tray_or_exit_modal-radio-tray = Minimaliseren naar systeemvak
@@ -1489,7 +1489,7 @@ vrc_config-avatar_measurement_type-ARM_SPAN = Arm Span
 error_collection_modal-title = Kunnen we fouten verzamelen?
 error_collection_modal-description_v2 =
     { settings-interface-behavior-error_tracking-description_v2 }
-    
+
     U kunt deze instelling later wijzigen in de sectie Gedrag van de instellingenpagina.
 error_collection_modal-confirm = Ik ben akkoord
 error_collection_modal-cancel = Ik wil het niet

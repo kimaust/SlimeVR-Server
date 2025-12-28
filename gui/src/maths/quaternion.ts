@@ -78,3 +78,27 @@ export function similarQuaternions(
 
   return len <= tolerance ** 2 * squareSum;
 }
+
+const DEG_TO_RAD = Math.PI / 180;
+
+/**
+ * Creates a quaternion from a yaw angle in degrees.
+ * 0° = Back, 90° = Left, 180° = Front, -90° = Right
+ */
+export function yawDegreesToQuaternion(degrees: number): Quaternion {
+  const radians = degrees * DEG_TO_RAD;
+  const halfAngle = radians / 2;
+  return new Quaternion(0, Math.sin(halfAngle), 0, Math.cos(halfAngle));
+}
+
+/**
+ * Extracts the yaw angle in degrees from a mounting orientation quaternion.
+ * For a pure Y-axis rotation quaternion (0, sin(θ/2), 0, cos(θ/2)),
+ * the angle θ = 2 * atan2(y, w).
+ * 0° = Back, 90° = Left, 180° = Front, -90° = Right
+ */
+export function getYawFromMountingOrientation(q?: QuatObject | null): number {
+  if (!q) return 0;
+  const radians = 2 * Math.atan2(q.y, q.w);
+  return Math.round(radians * RAD_TO_DEG);
+}

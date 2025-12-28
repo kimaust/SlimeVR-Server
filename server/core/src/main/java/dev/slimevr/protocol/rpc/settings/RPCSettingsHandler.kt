@@ -62,6 +62,19 @@ class RPCSettingsHandler(var rpcHandler: RPCHandler, var api: ProtocolAPI) {
 				bridge.changeShareSettings(TrackerRole.LEFT_HAND, req.steamVrTrackers().leftHand())
 				bridge.changeShareSettings(TrackerRole.RIGHT_HAND, req.steamVrTrackers().rightHand())
 				bridge.setAutomaticSharedTrackers(req.steamVrTrackers().automaticTrackerToggle())
+
+				// SteamVR-only foot tracker placement override.
+				// Sentinels:
+				// - footTrackerOffsetEnabled: -1 unset, 0 disabled, 1 enabled
+				// - footTrackerAnkleToToeRatio: -1 unset, else [0..1]
+				val footOffsetEnabled = req.steamVrTrackers().footTrackerOffsetEnabled().toInt()
+				if (footOffsetEnabled != -1) {
+					bridge.setFootTrackerOffsetEnabled(footOffsetEnabled != 0)
+				}
+				val ratio = req.steamVrTrackers().footTrackerAnkleToToeRatio()
+				if (ratio >= 0.0f) {
+					bridge.setFootTrackerAnkleToToeRatio(ratio)
+				}
 			}
 		}
 
@@ -73,6 +86,19 @@ class RPCSettingsHandler(var rpcHandler: RPCHandler, var api: ProtocolAPI) {
 					.filters
 				filtersConfig.type = type.configKey
 				filtersConfig.amount = req.filtering().amount()
+				if (req.filtering().hasSmoothMin()) {
+					filtersConfig.smoothMin = req.filtering().smoothMin()
+				}
+				if (req.filtering().hasPredictMin()) {
+					filtersConfig.predictMin = req.filtering().predictMin()
+				}
+				if (req.filtering().hasPredictMultiplier()) {
+					filtersConfig.predictMultiplier = req.filtering().predictMultiplier()
+				}
+				if (req.filtering().hasPredictBuffer()) {
+					// Flatbuffers exposes optional uint16 as Int on JVM.
+					filtersConfig.predictBuffer = req.filtering().predictBuffer()
+				}
 				filtersConfig.updateTrackersFilters()
 			}
 		}

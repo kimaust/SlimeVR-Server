@@ -59,6 +59,12 @@ class TrackersUDPServer(private val port: Int, name: String, private val tracker
 	// Gets initialized in this.run()
 	private lateinit var socket: DatagramSocket
 	private var lastKeepup = System.currentTimeMillis()
+	// Interval for per-connection keepalive traffic (heartbeat + ping)
+	private val connectionKeepaliveIntervalMs = 500L
+	// Consider a UDP connection timed out if we haven't received *any* packet
+	// in a while. This should be larger than the keepalive interval to avoid
+	// flapping due to normal scheduling/network jitter.
+	private val connectionTimeoutMs = 2 * connectionKeepaliveIntervalMs
 
 	private fun setUpNewConnection(handshakePacket: DatagramPacket, handshake: UDPPacket3Handshake) {
 		LogManager.info("[TrackerServer] Handshake received from ${handshakePacket.address}:${handshakePacket.port}")
@@ -343,7 +349,7 @@ class TrackersUDPServer(private val port: Int, name: String, private val tracker
 						e,
 					)
 				}
-				if (lastKeepup + 500 < System.currentTimeMillis()) {
+				if (lastKeepup + connectionKeepaliveIntervalMs < System.currentTimeMillis()) {
 					lastKeepup = System.currentTimeMillis()
 					synchronized(connections) {
 						for (conn in connections) {
@@ -351,7 +357,7 @@ class TrackersUDPServer(private val port: Int, name: String, private val tracker
 							bb.rewind()
 							parser.write(bb, conn, UDPPacket1Heartbeat)
 							socket.send(DatagramPacket(rcvBuffer, bb.position(), conn.address))
-							if (conn.lastPacket + 1000 < System.currentTimeMillis()) {
+							if (conn.lastPacket + connectionTimeoutMs < System.currentTimeMillis()) {
 								if (!conn.timedOut) {
 									conn.timedOut = true
 									LogManager.info("[TrackerServer] Tracker timed out: $conn")
@@ -380,7 +386,7 @@ class TrackersUDPServer(private val port: Int, name: String, private val tracker
 								conn.serialBuffer.setLength(0)
 							}
 
-							if (conn.lastPingPacketTime + 500 < System.currentTimeMillis()) {
+							if (conn.lastPingPacketTime + connectionKeepaliveIntervalMs < System.currentTimeMillis()) {
 								conn.lastPingPacketId = random.nextInt()
 								conn.lastPingPacketTime = System.currentTimeMillis()
 								bb.limit(bb.capacity())

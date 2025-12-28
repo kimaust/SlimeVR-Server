@@ -54,5 +54,19 @@ interface ISteamVRBridge : Bridge {
 	fun getAutomaticSharedTrackers(): Boolean
 	fun setAutomaticSharedTrackers(value: Boolean)
 
+	/**
+	 * SteamVR-only foot tracker position adjustment toggle.
+	 */
+	fun getFootTrackerOffsetEnabled(): Boolean
+
+	fun setFootTrackerOffsetEnabled(value: Boolean)
+
+	/**
+	 * 0.0 = ankle, 0.5 = middle, 1.0 = toe/end.
+	 */
+	fun getFootTrackerAnkleToToeRatio(): Float
+
+	fun setFootTrackerAnkleToToeRatio(value: Float)
+
 	fun getBridgeConfigKey(): String
 }

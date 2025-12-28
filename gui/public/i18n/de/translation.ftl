@@ -275,7 +275,7 @@ tracker-rotation-back = Hinten
 tracker-rotation-back_left = Hinten-Links
 tracker-rotation-back_right = Hinten-Rechts
 tracker-rotation-custom = Benutzerdefiniert
-tracker-rotation-overriden = (von Befestigungs-Reset überschrieben)
+tracker-rotation-overriden = (überschrieben: { $angle }°)
 
 ## Tracker information
 
@@ -315,7 +315,7 @@ tracker-settings-use_mag = Magnetometer auf diesem Tracker zulassen
 # Multiline!
 tracker-settings-use_mag-description =
     Soll dieser Tracker das Magnetometer verwenden um Drift zu reduzieren, wenn die Verwendung von Magnetometer erlaubt ist? <b> Bitten schalten Sie den Tracker nicht aus, während Sie diese Einstellung umschalten!</b>
-    
+
     Sie müssen zuerst die Verwendung des Magnetometers zulassen, <magSetting>klicken Sie hier, um zu den Einstellungen zu gelangen</magSetting>.
 tracker-settings-use_mag-label = Magnetometer zulassen
 # The .<name> means it's an attribute and it's related to the top key.
@@ -477,7 +477,7 @@ settings-general-tracker_mechanics-drift_compensation-prediction-label = Prognos
 settings-general-tracker_mechanics-drift_compensation_warning =
     <b>Warnung:</b> Verwenden Sie die Driftkompensation nur, wenn sie sehr oft
     reseten müssen (alle ~5-10 Minuten).
-    
+
     Zu den IMUs, die häufig einen Reset benötigen, gehören:
     Joy-Cons, owoTrack und MPUs (ohne aktuelle Firmware).
 settings-general-tracker_mechanics-drift_compensation_warning-cancel = Abbrechen
@@ -646,9 +646,9 @@ settings-general-interface-discord_presence-message =
 settings-interface-behavior-error_tracking = Fehlererfassung über Sentry.io
 settings-interface-behavior-error_tracking-description_v2 =
     <h1>Sind Sie mit der Erhebung anonymisierter Fehlerdaten einverstanden?</h1>
-    
+
     <b>Wir erfassen keine personenbezogenen Daten,</b> wie Ihre IP-Adresse oder WLAN-Zugangsdaten. SlimeVR respektiert Ihre Privatsphäre!
-    
+
     Um die bestmögliche Benutzererfahrung zu bieten, erfassen wir anonymisierte Fehlerberichte, Leistungsmetriken und Informationen zum Betriebssystem. Dies hilft uns, Fehler und Probleme mit SlimeVR zu erkennen. Diese Metriken werden über Sentry.io erfasst.
 settings-interface-behavior-error_tracking-label = Fehler an Entwickler senden
 
@@ -849,20 +849,20 @@ onboarding-reset_tutorial-skip = Schritt überspringen
 # Cares about multiline
 onboarding-reset_tutorial-0 =
     Tippen Sie { $taps } mal auf den markierten Tracker, um den horizontalen Reset auszulösen.
-    
+
     Dadurch zeigen die Tracker in die gleiche Richtung wie Ihre VR-Brille.
 # Cares about multiline
 onboarding-reset_tutorial-1 =
     Tippen Sie { $taps } mal auf den markierten Tracker, um einen vollständigen Reset auszulösen.
-    
+
     Sie müssen dafür in einer I-Pose stehen. Es gibt eine Verzögerung von 3 Sekunden (konfigurierbar), bevor der Reset tatsächlich durchgeführt wird.
     Dadurch werden die Position und Rotation aller Ihrer Tracker vollständig zurückgesetzt. Dies sollte die meisten Probleme beheben.
 # Cares about multiline
 onboarding-reset_tutorial-2 =
     Tippen Sie { $taps } mal auf den markierten Tracker um einen Befestigungs-Reset auszulösen.
-    
+
     Ein Befestigungs-Reset hilft dabei, die Tracker neu auszurichten, so wie diese tatsächlich an Ihnen angebracht sind. Zum Beispiel, wenn Sie ein Tracker versehentlich verschoben haben und dessen Orientierung sich stark verändert hat.
-    
+
     Sie müssen sich in einer "Skifahren"-Pose, wie im Befestigungs-Assistenten gezeigt wird, befinden. Nach dem Auslösen wird der Reset nach 3 Sekunden (konfigurierbar) durchgeführt.
 
 ## Setup start
@@ -1308,7 +1308,7 @@ tray_or_exit_modal-title = Was soll der Schließen-Knopf tun?
 # Multiline text
 tray_or_exit_modal-description =
     Hier können Sie auswählen, ob sich der Server beim Schließen beenden oder in den Infobereich minimiert werden soll.
-    
+
     Sie können dies später in den Einstellungen der Bedienoberfläche ändern!
 tray_or_exit_modal-radio-exit = Beenden
 tray_or_exit_modal-radio-tray = In den Infobereich minimieren
@@ -1345,7 +1345,7 @@ vrc_config-tracker_model-AXIS = Achse
 error_collection_modal-title = Können wir Fehler sammeln?
 error_collection_modal-description_v2 =
     { settings-interface-behavior-error_tracking-description_v2 }
-    
+
     Sie können diese Einstellung später im Abschnitt Verhalten auf der Einstellungsseite ändern.
 error_collection_modal-confirm = Ich stimme zu
 error_collection_modal-cancel = Ich will nicht

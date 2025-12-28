@@ -218,7 +218,7 @@ tracker-rotation-back = 後
 tracker-rotation-back_left = 左後
 tracker-rotation-back_right = 右後
 tracker-rotation-custom = カスタム
-tracker-rotation-overriden = (マウンティングリセットによる上書き)
+tracker-rotation-overriden = (上書き: { $angle }°)
 
 ## Tracker information
 
@@ -249,7 +249,7 @@ tracker-settings-drift_compensation_section-edit = ドリフト補正を行う
 # Multiline!
 tracker-settings-use_mag-description =
     このトラッカーは、マグネトメーターの使用が許可されている場合、ドリフトを減らすためにマグネトメーターを使用すべきですか？ <b>設定を切り替える際は、トラッカーをシャットダウンしないでください！</b>
-    
+
     まず、マグネトメーターの使用を許可する必要があります。<magSetting>設定に移動するにはここをクリックしてください</magSetting>。
 # The .<name> means it's an attribute and it's related to the top key.
 # In this case that is the settings for the assignment section.

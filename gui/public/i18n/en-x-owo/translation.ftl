@@ -256,7 +256,7 @@ tracker-rotation-back = bak
 tracker-rotation-back_left = back-weft
 tracker-rotation-back_right = back-wight
 tracker-rotation-custom = custowm
-tracker-rotation-overriden = (ovewwidden by meownting weset)
+tracker-rotation-overriden = (ovewwidden: { $angle }°)
 
 ## Tracker information
 
@@ -766,20 +766,20 @@ onboarding-reset_tutorial-skip = skip sedup
 # Cares about multiline
 onboarding-reset_tutorial-0 =
     bap { $taps } times the highwighted twackew fow twiggewing yaw weset.
-    
+
     dis wiwl make the twackews face the same diwection as youw HMD. ^w^
 # Cares about multiline
 onboarding-reset_tutorial-1 =
     bap { $taps } times the highwighted twackew fow twiggewing fuwl weset.
-    
+
     u need to be standing fow dis (i-pose). thewe is a 3 seconds deway (configuwabwe) befowe it actuawwy habbens.
     this fuwly wesets duh pawsition and wotation of awl youw twackews. it shouwd fix most issue.
 # Cares about multiline
 onboarding-reset_tutorial-2 =
     bap { $taps } time da highwighted twackew fow twiggewing meownting weset.
-    
+
     meownting weset hewps on how the twackews awe actuawly put on u, so if you accidentawly move dem and change how dey awe owiented by a big ameownt, this wiwl hewp.
-    
+
     u need to be on pose wike you awe skiing wike it's shown on da Pawtomatic Meownting wizawd and you have a 3 second deway (configuwabwe) befowe it gets twiggewed.
 
 ## Setup start
@@ -1206,7 +1206,7 @@ tray_or_exit_modal-title = owo wat shud da cwose button do?
 # Multiline text
 tray_or_exit_modal-description =
     dis lets u choose wether u wanna exit te sewvew ow to minimaize it to da tway wen pwessing teh cwose buttin.
-    
+
     yuow can cheange dis latew in da intewfayce setings! :D
 tray_or_exit_modal-radio-exit = exit on cwose
 tray_or_exit_modal-radio-tray = minimaize to systehm tway

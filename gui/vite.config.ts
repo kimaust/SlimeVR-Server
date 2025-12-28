@@ -35,48 +35,62 @@ export function i18nHotReload(): PluginOption {
 }
 
 // https://vitejs.dev/config/
-export default defineConfig({
-  define: {
-    __COMMIT_HASH__: JSON.stringify(commitHash),
-    __VERSION_TAG__: JSON.stringify(versionTag),
-    __GIT_CLEAN__: gitClean,
-  },
-  plugins: [
+export default defineConfig(({ command, mode }) => {
+  // Avoid noisy warnings/telemetry during local dev.
+  // Only run Sentry sourcemap upload in production builds when a token is provided (e.g. CI).
+  const sentryAuthToken = process.env.SENTRY_AUTH_TOKEN;
+  const enableSentryBundlerPlugin =
+    command === 'build' && mode === 'production' && !!sentryAuthToken;
+
+  const plugins = [
     react({ babel: { plugins: [jotaiReactRefresh] } }),
     i18nHotReload(),
     visualizer() as PluginOption,
-    sentryVitePlugin({
-      org: 'slimevr',
-      project: 'slimevr-server-gui-react',
-    }),
-  ],
-  build: {
-    target: 'es2022',
-    emptyOutDir: true,
+    enableSentryBundlerPlugin
+      ? sentryVitePlugin({
+          org: 'slimevr',
+          project: 'slimevr-server-gui-react',
+          authToken: sentryAuthToken,
+          telemetry: false,
+        })
+      : null,
+  ].filter(Boolean) as PluginOption[];
 
-    commonjsOptions: {
-      include: [/solarxr-protocol/, /node_modules/],
+  return {
+    define: {
+      __COMMIT_HASH__: JSON.stringify(commitHash),
+      __VERSION_TAG__: JSON.stringify(versionTag),
+      __GIT_CLEAN__: gitClean,
     },
-
-    sourcemap: true,
-  },
-  optimizeDeps: {
-    esbuildOptions: {
+    plugins,
+    build: {
       target: 'es2022',
+      emptyOutDir: true,
+
+      commonjsOptions: {
+        include: [/solarxr-protocol/, /node_modules/],
+      },
+
+      sourcemap: true,
     },
-    needsInterop: ['solarxr-protocol'],
-    include: ['solarxr-protocol'],
-  },
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, 'src'),
+    optimizeDeps: {
+      esbuildOptions: {
+        target: 'es2022',
+      },
+      needsInterop: ['solarxr-protocol'],
+      include: ['solarxr-protocol'],
     },
-  },
-  css: {
-    preprocessorOptions: {
-      scss: {
-        api: 'modern',
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, 'src'),
       },
     },
-  },
+    css: {
+      preprocessorOptions: {
+        scss: {
+          api: 'modern',
+        },
+      },
+    },
+  };
 });

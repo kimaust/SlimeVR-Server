@@ -347,7 +347,7 @@ tracker-rotation-back = Dietro
 tracker-rotation-back_left = Posteriore sinistra
 tracker-rotation-back_right = Posteriore destra
 tracker-rotation-custom = Personalizzata
-tracker-rotation-overriden = (sovrascritto dal ripristino del posizionamento)
+tracker-rotation-overriden = (sovrascritto: { $angle }°)
 
 ## Tracker information
 
@@ -387,7 +387,7 @@ tracker-settings-use_mag = Consenti il magnetometro su questo tracker
 # Multiline!
 tracker-settings-use_mag-description =
     Vuoi consentire al tracker l'utilizzo del magnetometro per ridurre il drift quando l'uso del magnetometro è consentito? <b>Per favore non spegnere il tracker durante l'attivazione!</b>
-    
+
     È necessario prima consentire l'utilizzo del magnetometro, <magSetting>fare clic qui per accedere alle impostazioni</magSetting>.
 tracker-settings-use_mag-label = Consenti magnetometro
 # The .<name> means it's an attribute and it's related to the top key.
@@ -544,7 +544,7 @@ settings-general-tracker_mechanics-drift_compensation-prediction-label = Compens
 settings-general-tracker_mechanics-drift_compensation_warning =
     <b>Attenzione:</b> Utilizzare la compensazione del drift solo se è necessario il ripristino
     molto spesso (ogni ~5-10 minuti).
-    
+
     Alcune IMU che sono soggetti a frequenti ripristini includono:
     Joy-Con, owoTrack e MPU (senza firmware recente).
 settings-general-tracker_mechanics-drift_compensation_warning-cancel = Annulla
@@ -728,9 +728,9 @@ settings-general-interface-discord_presence-message =
 settings-interface-behavior-error_tracking = Raccolta degli errori tramite Sentry.io
 settings-interface-behavior-error_tracking-description_v2 =
     <h1>Acconsenti alla raccolta di dati di errore anonimizzati?</h1>
-    
+
     <b>Non raccogliamo informazioni personali</b> come l'indirizzo IP o le credenziali wireless. SlimeVR ha a cuore la tua privacy!
-    
+
     Per offrire la migliore esperienza utente, raccogliamo segnalazioni di errori anonime, metriche delle prestazioni e informazioni sul sistema operativo. Questo ci aiuta a rilevare bug e problemi con SlimeVR. Queste metriche vengono raccolte tramite Sentry.io.
 settings-interface-behavior-error_tracking-label = Invia errori agli sviluppatori
 
@@ -934,20 +934,20 @@ onboarding-reset_tutorial-skip = Salta passaggio
 # Cares about multiline
 onboarding-reset_tutorial-0 =
     Tocca { $taps } volte il tracker evidenziato per eseguire il ripristino dell'orientamento.
-    
+
     Ciò farà sì che i tracker siano rivolti nella stessa direzione del tuo HMD.
 # Cares about multiline
 onboarding-reset_tutorial-1 =
     Tocca { $taps } volte il tracker evidenziato per eseguire il ripristino completo.
-    
+
     Devi stare in piedi drittə per questo (I-pose). C'è un ritardo di 3 secondi (configurabile) prima che accada effettivamente.
     Questo ripristinerà  completamente la posizione e la rotazione di tutti i tuoi tracker. Dovrebbe risolvere la maggior parte dei problemi.
 # Cares about multiline
 onboarding-reset_tutorial-2 =
     Tocca { $taps } volte il tracker evidenziato per eseguire il ripristino del posizionamento.
-    
+
     Il ripristino del posizionamento aiuta a determinare come i tracker vengono effettivamente posizionati su di te, quindi se li hai spostati accidentalmente e hai cambiato il modo in cui sono orientati di una grande quantità, questo aiuterà.
-    
+
     Devi essere in posa come se stessi sciando come mostrato nella procedura guidata di posizionamento automatico e ha un ritardo di 3 secondi (configurabile) prima che venga attivato.
 
 ## Setup start
@@ -1431,7 +1431,7 @@ tray_or_exit_modal-title = Cosa dovrebbe fare il pulsante di chiusura?
 # Multiline text
 tray_or_exit_modal-description =
     Questa opzione ti permette di scegliere se si desidera uscire dal server o ridurlo a icona nella barra delle applicationi quando si preme il pulsante di chiusura.
-    
+
     Puoi cambiare la tua scelta in seguito nelle impostazioni dell'interfaccia!
 tray_or_exit_modal-radio-exit = Termina alla chiusura
 tray_or_exit_modal-radio-tray = Riduci a icona nella barra delle applicazioni
@@ -1492,7 +1492,7 @@ vrc_config-avatar_measurement_type-ARM_SPAN = Apertura del braccio
 error_collection_modal-title = Possiamo raccogliere gli errori?
 error_collection_modal-description_v2 =
     { settings-interface-behavior-error_tracking-description_v2 }
-    
+
     Puoi modificare questa impostazione in un secondo momento nella sezione Comportamento delle impostazioni.
 error_collection_modal-confirm = Acconsento
 error_collection_modal-cancel = Non acconsento

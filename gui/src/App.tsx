@@ -38,7 +38,6 @@ import { VMCSettings } from './components/settings/pages/VMCSettings';
 import { MountingChoose } from './components/onboarding/pages/mounting/MountingChoose';
 import { VersionUpdateModal } from './components/VersionUpdateModal';
 import { openUrl } from '@tauri-apps/plugin-opener';
-import semver from 'semver';
 import { useBreakpoint, useIsTauri } from './hooks/breakpoint';
 import { VRModePage } from './components/vr-mode/VRModePage';
 import { InterfaceSettings } from './components/settings/pages/InterfaceSettings';
@@ -206,22 +205,8 @@ export default function App() {
       setUpdateFound('');
       return;
     }
-    async function fetchReleases() {
-      const releases = await fetch(
-        `https://api.github.com/repos/${GH_REPO}/releases`
-      )
-        .then((res) => res.json())
-        .then((json: any[]) => json.filter((rl) => rl?.prerelease === false));
-
-      if (typeof releases[0].tag_name !== 'string') return;
-
-      const version = semver.coerce(releases[0].tag_name);
-
-      if (version && semver.gt(version, __VERSION_TAG__)) {
-        setUpdateFound(releases[0].tag_name);
-      }
-    }
-    fetchReleases().catch(() => error('failed to fetch releases'));
+    // Disabled: prevent automatic GitHub requests (release checks).
+    setUpdateFound('');
   }, []);
 
   if (isTauri) {

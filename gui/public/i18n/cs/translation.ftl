@@ -236,7 +236,7 @@ tracker-rotation-back = Zadní
 tracker-rotation-back_left = Vzadu vlevo
 tracker-rotation-back_right = Vzadu vpravo
 tracker-rotation-custom = Vlastní nastavení
-tracker-rotation-overriden = (přepsáno kalibrací nasazení)
+tracker-rotation-overriden = (přepsáno: { $angle }°)
 
 ## Tracker information
 
@@ -276,7 +276,7 @@ tracker-settings-use_mag = Povolit magnetometr na tomto trackeru
 # Multiline!
 tracker-settings-use_mag-description =
     Měl by tento tracker používat magnetometer k redukci driftu když je použití magnetometru povoleno? <b> Prosím nevypínejte váš tracker při přepínání tohoto nastavení!</b>
-    
+
     Nejprve musíte povolit používání magnetometru, <magSetting>Kliknutím zde přejdete k nastavená magnetometru</magSetting>.
 tracker-settings-use_mag-label = Povolit magnetometr
 # The .<name> means it's an attribute and it's related to the top key.
@@ -435,7 +435,7 @@ settings-general-tracker_mechanics-drift_compensation-prediction-label = Predikc
 settings-general-tracker_mechanics-drift_compensation_warning =
     <b>Varování:</b> Kompenzaci driftu používejte pouze tehdy kdy musíte resetovat
     Neobvykle často (každých ~5-10 minut).
-    
+
     Některé IMU které náchylné k častým resetům zahrnují:
     Joy-Cons, owoTrack a MPU (bez aktuálního firmwaru).
 settings-general-tracker_mechanics-drift_compensation_warning-cancel = Zrušit
@@ -609,9 +609,9 @@ settings-general-interface-discord_presence-message =
 settings-interface-behavior-error_tracking = Sběr chyb prostřednictvím Sentry.io
 settings-interface-behavior-error_tracking-description_v2 =
     <h1>Souhlasíte se shromažďováním anonymizovaých údajů o chybých?</h1>
-    
+
     <b>Neschrožďujeme osobní udaje!</b> pro příklad IP adresy nebo přihlašovací údaje k sítím Wi-Fi. SlimeVR respektuje vaše soukromí!
-    
+
     Aby jsme mohli poskytnout nejlepší zážitek uživatelům, schromažďujeme proto anonymizované zprávy o chybých, metriky výkon a informace o operačním systém. To nám pomáhá zjištovat chyby a problémy s SlimeVR. Tyto matriky jsou schromažďovány prostřednictvím Sentry.io.
 settings-interface-behavior-error_tracking-label = Odeslat chyby vývojářům
 
@@ -808,12 +808,12 @@ onboarding-reset_tutorial-skip = Přeskočit krok
 # Cares about multiline
 onboarding-reset_tutorial-0 =
     Klepněte na zvýrazněný snímač { $taps } krát pro resetování rotace.
-    
+
     Tím nastavíte snímače tak, aby směřovaly stejným směrem jako váš headset (HMD).
 # Cares about multiline
 onboarding-reset_tutorial-1 =
     Pro plný reset poklepejte { $taps } krát na zvýrazněný tracker.
-    
+
     Pro tuto funkci musíte stát v základní pozici (ruce podél těla). Před provedením resetu je zde 3 sekundová prodleva (lze nastavit).
     Tímto se kompletně resetuje pozice a rotace všech vašich trackerů, což by mělo vyřešit většinu problémů.
 
@@ -1215,7 +1215,7 @@ tray_or_exit_modal-title = Co chcete aby "křížek" udělal?
 # Multiline text
 tray_or_exit_modal-description =
     Tímto si zvolíte, zda chcete při stisknutí tlačítka pro zavření ukončit server, nebo jej pouze minimalizovat do systémové lišty.
-    
+
     Toto nastavení můžete později změnit v nastavení aplikace.
 tray_or_exit_modal-radio-exit = Ukončit při zavření
 tray_or_exit_modal-radio-tray = Minimalizovat
@@ -1270,7 +1270,7 @@ vrc_config-avatar_measurement_type-ARM_SPAN = Rozpětí paží
 error_collection_modal-title = Můžeme sbírat chyby?
 error_collection_modal-description_v2 =
     { settings-interface-behavior-error_tracking-description_v2 }
-    
+
     Tohle lze později změnit v sekci Chování v nastavení.
 error_collection_modal-confirm = Souhlasím
 error_collection_modal-cancel = Nesouhlasím

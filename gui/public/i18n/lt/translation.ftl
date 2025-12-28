@@ -306,7 +306,7 @@ tracker-rotation-back = Gale
 tracker-rotation-back_left = Gale kairėje
 tracker-rotation-back_right = Gale dešinėje
 tracker-rotation-custom = Pasirinktinis
-tracker-rotation-overriden = (perstatyta pagal tvirtinimo atstatymą)
+tracker-rotation-overriden = (perstatyta: { $angle }°)
 
 ## Tracker information
 
@@ -346,7 +346,7 @@ tracker-settings-use_mag = Leisti sekiklio magnetometro naudojimą
 # Multiline!
 tracker-settings-use_mag-description =
     Ar šis sekiklis turėtų naudoti magnetometrą dreifui sumažinti, kai įjungtas jo naudojimas? <b>Neišjunkite sekiklio keisdami šį nustatymą!</b>
-    
+
     Pirmiausia reikia įjungti magnetometro naudojimą, <magSetting>spustelėkite čia, kad pereiti prie nustatymo.</magSetting>
 tracker-settings-use_mag-label = Leisti magnetometro naudojimą
 # The .<name> means it's an attribute and it's related to the top key.
@@ -413,7 +413,7 @@ tracker_selection_menu-dont_assign = Išvalyti priskyrimą
 # This line cares about multilines.
 # <b>text</b> means that the text should be bold.
 tracker_selection_menu-neck_warning =
-    <b>Dėmesio:</b> Kaklo sekiklio naudojimas gali sutrikdyti kraujotaką į 
+    <b>Dėmesio:</b> Kaklo sekiklio naudojimas gali sutrikdyti kraujotaką į
     galvą ir būti mirtinai pavojingas, jei dirželis netinkamai sureguliuotas!
 tracker_selection_menu-neck_warning-done = Suprantu riziką
 tracker_selection_menu-neck_warning-cancel = Atšaukti
@@ -504,7 +504,7 @@ settings-general-tracker_mechanics-drift_compensation-prediction-label = Dreifo 
 settings-general-tracker_mechanics-drift_compensation_warning =
     <b>Dėmesio:</b> Dreifo kompensavimo naudokite tik jeigu jūsų
     sekikliams reikalinga labai dažnai atlikti atstatymus (kas 5, 10 min.).
-    
+
     Kai kurie sekikliai, linkę į dažną atstatymą:
     Joycon'ai, owoTrack, ir MPU IMU jutikliai be naujos programinės įrangos
 settings-general-tracker_mechanics-drift_compensation_warning-cancel = Atšaukti

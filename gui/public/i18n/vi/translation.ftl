@@ -203,7 +203,7 @@ tracker-rotation-back = Sau
 tracker-rotation-back_left = Phía sau-Bên trái
 tracker-rotation-back_right = Phía sau-Bên phải
 tracker-rotation-custom = Tùy chọn
-tracker-rotation-overriden = (được ghi đè bởi reset hướng gắn tracker)
+tracker-rotation-overriden = (ghi đè: { $angle }°)
 
 ## Tracker information
 
@@ -675,20 +675,20 @@ onboarding-reset_tutorial-skip = Bỏ qua bước
 # Cares about multiline
 onboarding-reset_tutorial-0 =
     Nhấn { $taps } lần thiết bị được đánh dấu để kích hoạt đặt lại chiều quay.
-    
+
     Điều này sẽ làm cho các trình theo dõi quay mặt về cùng hướng với kính thực thế ảo (HMD) của bạn.
 # Cares about multiline
 onboarding-reset_tutorial-1 =
     Nhấn vào { $taps } lần thiết bị được đánh dấu để kích hoạt đặt lại toàn bộ.
-    
+
     Bạn cần phải đứng thẳng tay để làm việc này (i-pose). Có độ trễ 3 giây (có thể định cấu hình) trước khi nó thực sự xảy ra.
     Điều này đặt lại hoàn toàn vị trí và xoay của tất cả các trình theo dõi của bạn. Nó sẽ khắc phục hầu hết các vấn đề.
 # Cares about multiline
 onboarding-reset_tutorial-2 =
     Nhấn vào { $taps } lần thiết bị được đánh dấu để kích hoạt đặt lại lắp.
-    
+
     Thiết lập lại gắn kết giúp ích cho cách các trình theo dõi thực sự được đặt vào bạn, vì vậy nếu bạn vô tình di chuyển chúng và thay đổi cách chúng được định hướng với số lượng lớn, điều này sẽ hữu ích.
-    
+
     Bạn cần phải ở trên một tư thế như bạn đang trượt tuyết như nó được hiển thị trên trình hướng dẫn gắn tự động và bạn có độ trễ 3 giây (có thể định cấu hình) trước khi nó được kích hoạt.
 
 ## Setup start
@@ -1019,7 +1019,7 @@ tray_or_exit_modal-title = Nút đóng nên làm gì?
 # Multiline text
 tray_or_exit_modal-description =
     Điều này cho phép bạn chọn xem bạn muốn thoát khỏi chương trình hoặc thu nhỏ nó vào khay khi nhấn nút đóng.
-    
+
     Bạn có thể thay đổi điều này sau trong cài đặt giao diện.
 tray_or_exit_modal-radio-exit = Thoát khi đóng
 tray_or_exit_modal-radio-tray = Thu nhỏ vào khay hệ thống

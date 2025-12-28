@@ -1,5 +1,5 @@
 import { Localized, useLocalization } from '@fluent/react';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { DefaultValues, useForm } from 'react-hook-form';
 import {
   ChangeSettingsRequestT,
@@ -22,6 +22,7 @@ import { CheckBox } from '@/components/commons/Checkbox';
 import { SteamIcon } from '@/components/commons/icon/SteamIcon';
 import { WrenchIcon } from '@/components/commons/icon/WrenchIcons';
 import { NumberSelector } from '@/components/commons/NumberSelector';
+import { Range } from '@/components/commons/Range';
 import { Radio } from '@/components/commons/Radio';
 import { Typography } from '@/components/commons/Typography';
 import {
@@ -56,10 +57,16 @@ export type SettingsForm = {
     rightElbow: boolean;
     leftHand: boolean;
     rightHand: boolean;
+    footTrackerOffsetEnabled: boolean;
+    footTrackerAnkleToToeRatio: number;
   };
   filtering: {
     type: number;
     amount: number;
+    smoothMin: number;
+    predictMin: number;
+    predictMultiplier: number;
+    predictBuffer: number;
   };
   toggles: {
     extendedSpine: boolean;
@@ -116,6 +123,8 @@ const defaultValues: SettingsForm = {
     rightHand: false,
     leftKnee: false,
     rightKnee: false,
+    footTrackerOffsetEnabled: false,
+    footTrackerAnkleToToeRatio: 0.5,
   },
   toggles: {
     extendedSpine: true,
@@ -140,7 +149,14 @@ const defaultValues: SettingsForm = {
     interpKneeTrackerAnkle: 0.85,
     interpKneeAnkle: 0.2,
   },
-  filtering: { amount: 0.1, type: FilteringType.NONE },
+  filtering: {
+    amount: 0.1,
+    type: FilteringType.NONE,
+    smoothMin: 11.0,
+    predictMin: 10.0,
+    predictMultiplier: 15.0,
+    predictBuffer: 6,
+  },
   tapDetection: {
     mountingResetEnabled: false,
     yawResetEnabled: false,
@@ -167,6 +183,10 @@ export function GeneralSettings() {
     style: 'percent',
     maximumFractionDigits: 0,
   });
+  const percentageFormatPrecise = new Intl.NumberFormat(currentLocales, {
+    style: 'percent',
+    maximumFractionDigits: 2,
+  });
   const secondsFormat = new Intl.NumberFormat(currentLocales, {
     style: 'unit',
     unit: 'second',
@@ -184,10 +204,15 @@ export function GeneralSettings() {
       automaticTrackerToggle,
       leftHand: steamVrLeftHand,
       rightHand: steamVrRightHand,
+      footTrackerOffsetEnabled: steamVrFootTrackerOffsetEnabled,
     },
   } = watch();
+  const filteringType = watch('filtering.type');
+  const isSmoothingSelected = Number(filteringType) === FilteringType.SMOOTHING;
+  const isPredictionSelected =
+    Number(filteringType) === FilteringType.PREDICTION;
 
-  const onSubmit = (values: SettingsForm) => {
+  const onSubmit = useCallback((values: SettingsForm) => {
     const settings = new ChangeSettingsRequestT();
 
     if (values.trackers) {
@@ -207,6 +232,12 @@ export function GeneralSettings() {
       trackers.rightHand = values.trackers.rightHand;
 
       trackers.automaticTrackerToggle = values.trackers.automaticTrackerToggle;
+
+      // SteamVR-only foot tracker placement override (advanced)
+      trackers.footTrackerOffsetEnabled = values.trackers.footTrackerOffsetEnabled
+        ? 1
+        : 0;
+      trackers.footTrackerAnkleToToeRatio = Number(values.trackers.footTrackerAnkleToToeRatio);
       settings.steamVrTrackers = trackers;
     }
 
@@ -273,6 +304,11 @@ export function GeneralSettings() {
     const filtering = new FilteringSettingsT();
     filtering.type = values.filtering.type;
     filtering.amount = values.filtering.amount;
+    filtering.smoothMin = values.filtering.smoothMin;
+    filtering.predictMin = values.filtering.predictMin;
+    filtering.predictMultiplier = values.filtering.predictMultiplier;
+    // protocol expects uint16; ensure we send an integer
+    filtering.predictBuffer = Math.round(values.filtering.predictBuffer);
     settings.filtering = filtering;
 
     settings.stayAligned = serializeStayAlignedSettings(values.stayAligned);
@@ -282,12 +318,21 @@ export function GeneralSettings() {
     }
 
     sendRPCPacket(RpcMessage.ChangeSettingsRequest, settings);
-  };
+  }, [sendRPCPacket]);
+
+  // Prevent "auto-save" from firing while we are syncing initial values from the server,
+  // since that can re-apply filtering/skeleton settings and cause a noticeable pose jump.
+  const hasLoadedSettingsRef = useRef(false);
+  const syncingFromServerRef = useRef(false);
 
   useEffect(() => {
-    const subscription = watch(() => handleSubmit(onSubmit)());
+    const subscription = watch(() => {
+      if (!hasLoadedSettingsRef.current) return;
+      if (syncingFromServerRef.current) return;
+      handleSubmit(onSubmit)();
+    });
     return () => subscription.unsubscribe();
-  }, []);
+  }, [handleSubmit, onSubmit, watch]);
 
   useEffect(() => {
     sendRPCPacket(RpcMessage.SettingsRequest, new SettingsRequestT());
@@ -300,11 +345,32 @@ export function GeneralSettings() {
     const formData: DefaultValues<SettingsForm> = {};
 
     if (settings.filtering) {
-      formData.filtering = settings.filtering;
+      formData.filtering = {
+        ...settings.filtering,
+        smoothMin:
+          (settings.filtering as any).smoothMin ??
+          defaultValues.filtering.smoothMin,
+        predictMin:
+          (settings.filtering as any).predictMin ??
+          defaultValues.filtering.predictMin,
+        predictMultiplier:
+          (settings.filtering as any).predictMultiplier ??
+          defaultValues.filtering.predictMultiplier,
+        predictBuffer:
+          (settings.filtering as any).predictBuffer ??
+          defaultValues.filtering.predictBuffer,
+      };
     }
 
     if (settings.steamVrTrackers) {
-      formData.trackers = settings.steamVrTrackers;
+      formData.trackers = {
+        ...defaultValues.trackers,
+        ...settings.steamVrTrackers,
+        footTrackerOffsetEnabled:
+          ((settings.steamVrTrackers as any).footTrackerOffsetEnabled ?? 0) !== 0,
+        footTrackerAnkleToToeRatio:
+          (settings.steamVrTrackers as any).footTrackerAnkleToToeRatio ?? 0.5,
+      };
       if (
         settings.steamVrTrackers.leftHand ||
         settings.steamVrTrackers.rightHand
@@ -392,7 +458,10 @@ export function GeneralSettings() {
       );
     }
 
+    syncingFromServerRef.current = true;
     reset({ ...getValues(), ...formData });
+    hasLoadedSettingsRef.current = true;
+    syncingFromServerRef.current = false;
   });
 
   useEffect(() => {
@@ -576,6 +645,66 @@ export function GeneralSettings() {
                 )}
               />
             </div>
+            <div className="flex flex-col pt-4" />
+            <Typography variant="section-title">
+              {l10n.getString('settings-general-steamvr-foot_tracker_placement')}
+            </Typography>
+            <div className="flex flex-col pt-2 pb-4">
+              {l10n
+                .getString(
+                  'settings-general-steamvr-foot_tracker_placement-description'
+                )
+                .split('\n')
+                .map((line, i) => (
+                  <Typography key={i}>{line}</Typography>
+                ))}
+            </div>
+            <CheckBox
+              variant="toggle"
+              outlined
+              control={control}
+              name="trackers.footTrackerOffsetEnabled"
+              label={l10n.getString(
+                'settings-general-steamvr-foot_tracker_placement-enable'
+              )}
+            />
+            <div
+              className={`pt-2 ${
+                !steamVrFootTrackerOffsetEnabled
+                  ? 'opacity-50 pointer-events-none'
+                  : ''
+              }`}
+            >
+              <Range
+                control={control}
+                name="trackers.footTrackerAnkleToToeRatio"
+                min={0}
+                max={1}
+                step={0.05}
+                disabled={!steamVrFootTrackerOffsetEnabled}
+                values={[
+                  {
+                    value: 0,
+                    label: l10n.getString(
+                      'settings-general-steamvr-foot_tracker_placement-ankle'
+                    ),
+                  },
+                  {
+                    value: 0.5,
+                    label: l10n.getString(
+                      'settings-general-steamvr-foot_tracker_placement-middle'
+                    ),
+                    defaultValue: true,
+                  },
+                  {
+                    value: 1,
+                    label: l10n.getString(
+                      'settings-general-steamvr-foot_tracker_placement-toe'
+                    ),
+                  },
+                ]}
+              />
+            </div>
           </>
         </SettingsPagePaneLayout>
         <StayAlignedSettings values={getValues()} control={control} />
@@ -637,17 +766,99 @@ export function GeneralSettings() {
                 value={FilteringType.PREDICTION.toString()}
               />
             </div>
-            <div className="flex gap-5 pt-5 md:flex-row flex-col">
+            <div className="flex gap-5 pt-5 flex-col md:flex-row md:flex-wrap">
               <NumberSelector
                 control={control}
                 name="filtering.amount"
                 label={l10n.getString(
                   'settings-general-tracker_mechanics-filtering-amount'
                 )}
-                valueLabelFormat={(value) => percentageFormat.format(value)}
-                min={0.1}
+                valueLabelFormat={(value) => percentageFormatPrecise.format(value)}
+                min={0.0}
                 max={1.0}
+                step={0.0001}
+                input={{
+                  enabled: true,
+                  suffix: '%',
+                  min: 0,
+                  max: 100,
+                  step: 0.01,
+                  decimals: 2,
+                  toInput: (value) => value * 100,
+                  fromInput: (value) => value / 100,
+                }}
+              />
+              <NumberSelector
+                control={control}
+                name="filtering.smoothMin"
+                label={l10n.getString(
+                  'settings-general-tracker_mechanics-filtering-smoothing-min'
+                )}
+                min={0.0}
+                max={100.0}
                 step={0.1}
+                disabled={!isSmoothingSelected}
+                input={{
+                  enabled: true,
+                  min: 0,
+                  max: 100,
+                  step: 0.1,
+                  decimals: 1,
+                }}
+              />
+              <NumberSelector
+                control={control}
+                name="filtering.predictMin"
+                label={l10n.getString(
+                  'settings-general-tracker_mechanics-filtering-prediction-min'
+                )}
+                min={0.0}
+                max={100.0}
+                step={0.1}
+                disabled={!isPredictionSelected}
+                input={{
+                  enabled: true,
+                  min: 0,
+                  max: 100,
+                  step: 0.1,
+                  decimals: 1,
+                }}
+              />
+              <NumberSelector
+                control={control}
+                name="filtering.predictMultiplier"
+                label={l10n.getString(
+                  'settings-general-tracker_mechanics-filtering-prediction-multiplier'
+                )}
+                min={0.0}
+                max={100.0}
+                step={0.1}
+                disabled={!isPredictionSelected}
+                input={{
+                  enabled: true,
+                  min: 0,
+                  max: 100,
+                  step: 0.1,
+                  decimals: 1,
+                }}
+              />
+              <NumberSelector
+                control={control}
+                name="filtering.predictBuffer"
+                label={l10n.getString(
+                  'settings-general-tracker_mechanics-filtering-prediction-buffer'
+                )}
+                min={1}
+                max={120}
+                step={1}
+                disabled={!isPredictionSelected}
+                input={{
+                  enabled: true,
+                  min: 1,
+                  max: 120,
+                  step: 1,
+                  decimals: 0,
+                }}
               />
             </div>
             <div className="flex gap-5 pt-5 md:flex-row flex-col">
@@ -727,7 +938,7 @@ export function GeneralSettings() {
                 valueLabelFormat={(value) => percentageFormat.format(value)}
                 min={0.1}
                 max={1.0}
-                step={0.1}
+                step={0.01}
               />
             </div>
 

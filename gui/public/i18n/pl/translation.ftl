@@ -368,7 +368,7 @@ tracker-rotation-back = Tył
 tracker-rotation-back_left = Lewy tył
 tracker-rotation-back_right = Prawy tył
 tracker-rotation-custom = Własne
-tracker-rotation-overriden = (nadpisany przez reset montażu)
+tracker-rotation-overriden = (nadpisany: { $angle }°)
 
 ## Tracker information
 
@@ -769,9 +769,9 @@ settings-general-interface-discord_presence-message =
 settings-interface-behavior-error_tracking = Zbieranie błędów za pomocą Sentry.io
 settings-interface-behavior-error_tracking-description_v2 =
     <h1>Czy wyrażasz zgodę na gromadzenie anonimowych danych o błędach?</h1>
-    
+
     <b>Nie gromadzimy danych osobowych</b> , takich jak adres IP lub dane uwierzytelniające sieci bezprzewodowej. SlimeVR ceni Twoją prywatność!
-    
+
     Aby zapewnić jak najlepsze wrażenia użytkownika, gromadzimy anonimowe raporty o błędach, wskaźniki wydajności i informacje o systemie operacyjnym. Pomaga nam to wykrywać błędy i problemy ze SlimeVR. Dane te są zbierane za pomocą Sentry.io.
 settings-interface-behavior-error_tracking-label = Wysyłanie błędów do deweloperów
 settings-interface-behavior-bvh_directory = Ścieżka do zapisywania nagrań BVH
@@ -987,20 +987,20 @@ onboarding-reset_tutorial-skip = Pomiń krok
 # Cares about multiline
 onboarding-reset_tutorial-0 =
     Stuknij { $taps } razy podświetlony tracker, aby uruchomić reset odchylenia.
-    
+
     Spowoduje to, że trackery będą skierowane w tym samym kierunku, co Twój HMD.
 # Cares about multiline
 onboarding-reset_tutorial-1 =
     Stuknij { $taps } razy podświetlony tracker, aby wywołać pełny reset.
-    
+
     Musisz stać, aby to zrobić (i-pozycja). Istnieje 3-sekundowe opóźnienie (konfigurowalne), zanim to nastąpi.
     Spowoduje to całkowite zresetowanie pozycji i rotacji wszystkich trackerów. Powinien rozwiązać większość problemów.
 # Cares about multiline
 onboarding-reset_tutorial-2 =
     Stuknij { $taps } razy podświetlony tracker, aby uruchomić reset montażu.
-    
+
     Resetowanie montażu pomaga w tym, w jaki sposób trackery są faktycznie zakładane na ciebie, więc jeśli przypadkowo je przeniosłeś i zmieniłeś ich orientację o dużą ilość, to pomoże.
-    
+
     Musisz być w pozie, jakbyś jechał na nartach, tak jak jest to pokazane w kreatorze automatycznego montażu, i masz 3-sekundowe opóźnienie (konfigurowalne), zanim zostanie uruchomione.
 
 ## Setup start
@@ -1623,7 +1623,7 @@ vrc_config-avatar_measurement_type-ARM_SPAN = Rozpiętość ramion
 error_collection_modal-title = Czy możemy zbierać błędy?
 error_collection_modal-description_v2 =
     { settings-interface-behavior-error_tracking-description_v2 }
-    
+
     To ustawienie można zmienić później w sekcji Zachowanie na stronie ustawień.
 error_collection_modal-confirm = Zgadzam się
 error_collection_modal-cancel = Nie chcę

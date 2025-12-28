@@ -101,7 +101,7 @@ abstract class ProtobufBridge(@JvmField protected val bridgeName: String) : ISte
 	}
 
 	@VRServerThread
-	protected fun writeTrackerUpdate(localTracker: Tracker?) {
+	protected open fun writeTrackerUpdate(localTracker: Tracker?) {
 		val builder = ProtobufMessages.Position.newBuilder().setTrackerId(
 			localTracker!!.id,
 		)

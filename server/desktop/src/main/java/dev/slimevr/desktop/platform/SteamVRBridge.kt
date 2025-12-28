@@ -15,6 +15,7 @@ import dev.slimevr.tracking.trackers.TrackerRole.Companion.getById
 import dev.slimevr.tracking.trackers.TrackerUtils.getTrackerForSkeleton
 import dev.slimevr.util.ann.VRServerThread
 import io.eiren.util.collections.FastList
+import io.github.axisangles.ktmath.Vector3
 
 abstract class SteamVRBridge(
 	protected val server: VRServer,
@@ -140,6 +141,71 @@ abstract class SteamVRBridge(
 				instance.configManager.saveConfig()
 			}
 		}
+	}
+
+	@VRServerThread
+	protected override fun writeTrackerUpdate(localTracker: Tracker?) {
+		val tracker = localTracker ?: return
+
+		val builder = Position.newBuilder().setTrackerId(tracker.id)
+
+		if (tracker.hasPosition) {
+			var pos = tracker.position
+
+			// SteamVR driver bridge only shares computed trackers (see desktop/Main.kt),
+			// so it's safe to adjust these without affecting physical tracker inputs.
+			val ratio = config.footTrackerAnkleToToeRatio.coerceIn(0.0f, 1.0f)
+			if (config.footTrackerOffsetEnabled && tracker.isComputed && tracker.isInternal) {
+				val skeleton = instance.humanPoseManager.skeleton
+				val footBone = when (tracker.trackerPosition) {
+					TrackerPosition.LEFT_FOOT -> skeleton.leftFootBone
+					TrackerPosition.RIGHT_FOOT -> skeleton.rightFootBone
+					else -> null
+				}
+
+				if (footBone != null) {
+					val ankleToToe = footBone.getTailPosition() - footBone.getPosition()
+					if (ankleToToe.len() > 0.0001f) {
+						val toeDir = ankleToToe.unit()
+						// Current exported position is effectively at the toe/end; shift it back
+						// towards the ankle by (1 - ratio) * footLength.
+						val offset = toeDir * (-footBone.length * (1.0f - ratio))
+						pos += offset
+					}
+				}
+			}
+
+			builder.setX(pos.x)
+			builder.setY(pos.y)
+			builder.setZ(pos.z)
+		}
+
+		if (tracker.hasRotation) {
+			val rot = tracker.getRotation()
+			builder.setQx(rot.x)
+			builder.setQy(rot.y)
+			builder.setQz(rot.z)
+			builder.setQw(rot.w)
+		}
+
+		sendMessage(ProtobufMessage.newBuilder().setPosition(builder).build())
+	}
+
+	override fun getFootTrackerOffsetEnabled(): Boolean = config.footTrackerOffsetEnabled
+
+	override fun setFootTrackerOffsetEnabled(value: Boolean) {
+		if (config.footTrackerOffsetEnabled == value) return
+		config.footTrackerOffsetEnabled = value
+		instance.configManager.saveConfig()
+	}
+
+	override fun getFootTrackerAnkleToToeRatio(): Float = config.footTrackerAnkleToToeRatio
+
+	override fun setFootTrackerAnkleToToeRatio(value: Float) {
+		val clamped = value.coerceIn(0.0f, 1.0f)
+		if (config.footTrackerAnkleToToeRatio == clamped) return
+		config.footTrackerAnkleToToeRatio = clamped
+		instance.configManager.saveConfig()
 	}
 
 	@VRServerThread

@@ -184,29 +184,6 @@ async fn drop_client_on_loss<R: Runtime>(
 pub fn create_presence<R: Runtime>(app: &tauri::AppHandle<R>) -> tauri::Result<()> {
 	app.manage(ExposedClient(Mutex::new(None)));
 	app.manage(DiscordTimestamp(SystemTime::now()));
-	{
-		let app = app.clone();
-		tauri::async_runtime::spawn(async move {
-			let client = make_client(ds::Subscriptions::ACTIVITY).await;
-			if let Err(e) = client {
-				log::error!(target: "discord_presence", "couldn't initialize discord client: {e}");
-				return;
-			}
-			let Some(client) = client.unwrap() else {
-				log::debug!(target: "discord_presence", "discord took too long to answer (probably not open)");
-				return;
-			};
-			let user_wheel = client.wheel.user();
-			{
-				let mutex = app.state::<ExposedClient>();
-				let mut lock = mutex.0.lock().await;
-				*lock = Some(client)
-			}
-			tauri::async_runtime::spawn(async move {
-				drop_client_on_loss(app, user_wheel).await;
-			});
-		});
-	}
 
 	Ok(())
 }

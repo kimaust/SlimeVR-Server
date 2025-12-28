@@ -109,7 +109,11 @@ public class RPCSettingsBuilder {
 			.createFilteringSettings(
 				fbb,
 				TrackerFilters.getByConfigkey(filtersConfig.getType()).getId(),
-				filtersConfig.getAmount()
+				filtersConfig.getAmount(),
+				filtersConfig.getSmoothMin(),
+				filtersConfig.getPredictMin(),
+				filtersConfig.getPredictMultiplier(),
+				filtersConfig.getPredictBuffer()
 			);
 	}
 
@@ -165,7 +169,10 @@ public class RPCSettingsBuilder {
 					bridge.getShareSetting(TrackerRole.LEFT_ELBOW),
 					bridge.getShareSetting(TrackerRole.RIGHT_ELBOW),
 					bridge.getShareSetting(TrackerRole.LEFT_HAND),
-					bridge.getShareSetting(TrackerRole.RIGHT_HAND)
+					bridge.getShareSetting(TrackerRole.RIGHT_HAND),
+
+					(byte) (bridge.getFootTrackerOffsetEnabled() ? 1 : 0),
+					bridge.getFootTrackerAnkleToToeRatio()
 				);
 		}
 		return steamvrTrackerSettings;

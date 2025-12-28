@@ -66,9 +66,8 @@ export async function fetchCurrentFirmwareRelease(): Promise<FirmwareRelease | n
     (await cacheWrap(
       'firmware-releases',
       () =>
-        fetch('https://api.github.com/repos/SlimeVR/SlimeVR-Tracker-ESP/releases')
-          .then((res) => res.text())
-          .catch(() => null),
+        // Disabled: prevent GitHub requests for firmware releases.
+        Promise.resolve(null),
       60 * 60 * 1000
     )) || 'null'
   );

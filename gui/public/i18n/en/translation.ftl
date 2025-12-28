@@ -349,7 +349,7 @@ tracker-rotation-back = Back
 tracker-rotation-back_left = Back-Left
 tracker-rotation-back_right = Back-Right
 tracker-rotation-custom = Custom
-tracker-rotation-overriden = (overridden by mounting calibration)
+tracker-rotation-overriden = (overridden: { $angle }°)
 
 ## Tracker information
 tracker-infos-manufacturer = Manufacturer
@@ -466,6 +466,9 @@ tracker_selection_menu-neck_warning-cancel = Cancel
 ## Mounting menu
 mounting_selection_menu = Where do you want this tracker to be?
 mounting_selection_menu-close = Close
+mounting_selection_menu-custom_angle = Custom angle
+mounting_selection_menu-custom_angle-hint = 0° = Back, 90° = Left, 180° = Front, -90° = Right
+mounting_selection_menu-apply = Apply
 
 ## Sidebar settings
 settings-sidebar-title = Settings
@@ -510,6 +513,16 @@ settings-general-steamvr-trackers-left_elbow = Left elbow
 settings-general-steamvr-trackers-right_elbow = Right elbow
 settings-general-steamvr-trackers-left_hand = Left hand
 settings-general-steamvr-trackers-right_hand = Right hand
+
+settings-general-steamvr-foot_tracker_placement = Foot tracker placement
+settings-general-steamvr-foot_tracker_placement-description =
+    SteamVR expects the foot tracker to be at a specific point on the foot.\n
+    If your tracker model in SteamVR looks offset, you can override where SlimeVR exports the SteamVR foot tracker position.\n
+    This only affects the SteamVR virtual trackers, not your real tracker inputs.
+settings-general-steamvr-foot_tracker_placement-enable = Override SteamVR foot tracker position
+settings-general-steamvr-foot_tracker_placement-ankle = Ankle
+settings-general-steamvr-foot_tracker_placement-middle = Middle
+settings-general-steamvr-foot_tracker_placement-toe = Toe
 settings-general-steamvr-trackers-tracker_toggling = Automatic tracker assignment
 settings-general-steamvr-trackers-tracker_toggling-description = Automatically handles toggling SteamVR trackers on or off depending on your current tracker assignments.
 settings-general-steamvr-trackers-tracker_toggling-label = Automatic tracker assignment
@@ -533,6 +546,10 @@ settings-general-tracker_mechanics-filtering-type-smoothing-description = Smooth
 settings-general-tracker_mechanics-filtering-type-prediction = Prediction
 settings-general-tracker_mechanics-filtering-type-prediction-description = Reduces latency and makes movements more snappy, but may increase jitter.
 settings-general-tracker_mechanics-filtering-amount = Amount
+settings-general-tracker_mechanics-filtering-smoothing-min = Smoothing minimum (advanced)
+settings-general-tracker_mechanics-filtering-prediction-min = Prediction minimum (advanced)
+settings-general-tracker_mechanics-filtering-prediction-multiplier = Prediction multiplier (advanced)
+settings-general-tracker_mechanics-filtering-prediction-buffer = Prediction buffer (advanced)
 settings-general-tracker_mechanics-yaw-reset-smooth-time = Yaw reset smooth time (0s disables smoothing)
 settings-general-tracker_mechanics-drift_compensation = Drift compensation
 # This cares about multilines

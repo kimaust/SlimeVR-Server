@@ -22,6 +22,7 @@ import {
   QuaternionFromQuatT,
   rotationToQuatMap,
   similarQuaternions,
+  getYawInDegrees,
 } from '@/maths/quaternion';
 import { ArrowLink } from '@/components/commons/ArrowLink';
 import { BodyPartIcon } from '@/components/commons/BodyPartIcon';
@@ -444,7 +445,11 @@ export function TrackerSettingsPage() {
                         ),
                         new Quaternion()
                       )
-                        ? ` ${l10n.getString('tracker-rotation-overriden')}`
+                        ? ` ${l10n.getString('tracker-rotation-overriden', {
+                            angle: getYawInDegrees(
+                              tracker.tracker.info.mountingResetOrientation
+                            ),
+                          })}`
                         : '')}
                   </Typography>
                 </div>

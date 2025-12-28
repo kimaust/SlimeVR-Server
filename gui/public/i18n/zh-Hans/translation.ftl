@@ -348,7 +348,7 @@ tracker-rotation-back = 后
 tracker-rotation-back_left = 左后
 tracker-rotation-back_right = 右后
 tracker-rotation-custom = 自定义
-tracker-rotation-overriden = （被重置佩戴覆盖）
+tracker-rotation-overriden = （已覆盖: { $angle }°）
 
 ## Tracker information
 
@@ -388,7 +388,7 @@ tracker-settings-use_mag = 允许使用这个追踪器的磁力计
 # Multiline!
 tracker-settings-use_mag-description =
     如果「在追踪器上启用磁力计」已启用，是否要在这个追踪器上启用它来减轻飘移？<b>切换本选项时请勿关闭追踪器的电源！</b>
-    
+
     请先启用「在追踪器上启用磁力计」功能，<magSetting>点选此处以移动至该设定</magSetting>。
 tracker-settings-use_mag-label = 允许使用这个追踪器的磁力计
 # The .<name> means it's an attribute and it's related to the top key.
@@ -550,7 +550,7 @@ settings-general-tracker_mechanics-drift_compensation-prediction-label = 预测�
 settings-general-tracker_mechanics-drift_compensation_warning =
     <b>警告：</b> 仅在需要经常重置偏航角
     (大概5~10分钟左右需要重置一次) 时使用漂移补偿。
-    
+
     一些可能需要此补偿的 IMU 包括：
     Joy-Cons、owoTrack 和 MPU（使用旧DMP固件）。
 settings-general-tracker_mechanics-drift_compensation_warning-cancel = 取消
@@ -732,9 +732,9 @@ settings-general-interface-discord_presence-message =
 settings-interface-behavior-error_tracking = 通过 Sentry.io 收集错误信息
 settings-interface-behavior-error_tracking-description_v2 =
     <h1>您是否同意收集匿名的错误信息？</h1>
-    
+
     <b>我们不会收集您的个人信息</b> ，例如您的 IP 地址或 WiFi 信息。SlimeVR 重视您的隐私！
-    
+
     为了提供最佳用户体验，我们会收集匿名错误报告、性能指标和操作系统信息。这有助于我们检测 SlimeVR 的错误和问题。这些指标将通过 Sentry.io 收集。
 settings-interface-behavior-error_tracking-label = 向开发人员发送错误信息
 settings-interface-behavior-bvh_directory = BVH记录保存目录
@@ -947,20 +947,20 @@ onboarding-reset_tutorial-skip = 跳过步骤
 # Cares about multiline
 onboarding-reset_tutorial-0 =
     敲击 { $taps } 次高亮显示的追踪器以触发航向轴重置。
-    
+
     这将使追踪器朝向与您的头显相同的方向。
 # Cares about multiline
 onboarding-reset_tutorial-1 =
     敲击 { $taps } 次高亮显示的追踪器以触发完整重置。
-    
+
     此功能需要你站直（i-pose）后使用。 在重置实际发生前有 3 秒延迟（可配置）。
     这将完全重置所有追踪器的位置和旋转，应该能解决大多数问题。
 # Cares about multiline
 onboarding-reset_tutorial-2 =
     敲击 { $taps } 次高亮显示的追踪器以触发佩戴重置。
-    
+
     佩戴重置能对追踪器实际的配戴方式进行调整，所以如果你不小心移动了追踪器并将它们的佩戴方向改变了很多，这个功能将有所帮助。
-    
+
     你需要摆出一个像滑雪那样的姿势，就像在运行自动设置佩戴向导时做的那样，在重置实际发生前有 3 秒延迟（可配置）。
 
 ## Setup start
@@ -1517,7 +1517,7 @@ vrc_config-avatar_measurement_type-ARM_SPAN = 臂展
 error_collection_modal-title = 我们可以收集错误信息吗？
 error_collection_modal-description_v2 =
     { settings-interface-behavior-error_tracking-description_v2 }
-    
+
     您可以稍后在设置页面的行为部分中更改此设置。
 error_collection_modal-confirm = 我同意
 error_collection_modal-cancel = 还是算了

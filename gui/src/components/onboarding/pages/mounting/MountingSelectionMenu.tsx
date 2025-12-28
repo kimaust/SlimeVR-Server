@@ -1,10 +1,16 @@
 import classNames from 'classnames';
 import ReactModal from 'react-modal';
+import { useEffect, useState } from 'react';
 import { Button } from '@/components/commons/Button';
 import { Typography } from '@/components/commons/Typography';
 import { useLocalization } from '@fluent/react';
 import { FootIcon } from '@/components/commons/icon/FootIcon';
-import { rotationToQuatMap, similarQuaternions } from '@/maths/quaternion';
+import {
+  rotationToQuatMap,
+  similarQuaternions,
+  getYawFromMountingOrientation,
+  yawDegreesToQuaternion,
+} from '@/maths/quaternion';
 import { Quaternion } from 'three';
 import { SlimeUpIcon } from '@/components/commons/icon/SlimeUpIcon';
 import { BodyPart } from 'solarxr-protocol';
@@ -230,6 +236,36 @@ export function MountingSelectionMenu({
   currRotation?: Quaternion;
 }) {
   const { l10n } = useLocalization();
+  const [angleInput, setAngleInput] = useState<string>('');
+
+  // Sync angle input with current rotation when menu opens or rotation changes
+  useEffect(() => {
+    if (isOpen && currRotation) {
+      const currentAngle = getYawFromMountingOrientation(currRotation);
+      setAngleInput(String(currentAngle));
+    }
+  }, [isOpen, currRotation]);
+
+  const handleAngleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAngleInput(e.target.value);
+  };
+
+  const handleAngleApply = () => {
+    const angle = parseFloat(angleInput);
+    if (!isNaN(angle)) {
+      // Normalize angle to -180 to 180 range
+      let normalizedAngle = angle % 360;
+      if (normalizedAngle > 180) normalizedAngle -= 360;
+      if (normalizedAngle < -180) normalizedAngle += 360;
+      onDirectionSelected(yawDegreesToQuaternion(normalizedAngle));
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleAngleApply();
+    }
+  };
 
   return (
     <ReactModal
@@ -328,6 +364,28 @@ export function MountingSelectionMenu({
               />
             </g>
           </svg>
+          <div className="flex flex-col items-center gap-2 mt-2">
+            <Typography variant="section-title">
+              {l10n.getString('mounting_selection_menu-custom_angle')}
+            </Typography>
+            <div className="flex items-center gap-2">
+              <input
+                type="number"
+                value={angleInput}
+                onChange={handleAngleChange}
+                onKeyDown={handleKeyDown}
+                className="w-24 px-3 py-2 rounded-lg bg-background-60 text-background-10 text-center border border-background-40 focus:border-accent-background-30 focus:outline-none"
+                placeholder="0"
+              />
+              <Typography>°</Typography>
+              <Button variant="secondary" onClick={handleAngleApply}>
+                {l10n.getString('mounting_selection_menu-apply')}
+              </Button>
+            </div>
+            <Typography variant="vr-accessible" color="text-background-30">
+              {l10n.getString('mounting_selection_menu-custom_angle-hint')}
+            </Typography>
+          </div>
         </div>
       </div>
       <div

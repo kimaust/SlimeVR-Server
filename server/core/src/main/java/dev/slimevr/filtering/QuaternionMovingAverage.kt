@@ -7,19 +7,23 @@ import io.github.axisangles.ktmath.Quaternion.Companion.IDENTITY
 
 // influences the range of smoothFactor.
 private const val SMOOTH_MULTIPLIER = 42f
-private const val SMOOTH_MIN = 11f
+private const val DEFAULT_SMOOTH_MIN = 11f
 
 // influences the range of predictFactor
-private const val PREDICT_MULTIPLIER = 15f
-private const val PREDICT_MIN = 10f
+private const val DEFAULT_PREDICT_MULTIPLIER = 15f
+private const val DEFAULT_PREDICT_MIN = 10f
 
 // how many past rotations are used for prediction.
-private const val PREDICT_BUFFER = 6
+private const val DEFAULT_PREDICT_BUFFER = 6
 
 class QuaternionMovingAverage(
 	val type: TrackerFilters,
 	var amount: Float = 0f,
+	private val smoothMin: Float = DEFAULT_SMOOTH_MIN,
 	initialRotation: Quaternion = IDENTITY,
+	private val predictMin: Float = DEFAULT_PREDICT_MIN,
+	private val predictMultiplier: Float = DEFAULT_PREDICT_MULTIPLIER,
+	private val predictBuffer: Int = DEFAULT_PREDICT_BUFFER,
 ) {
 	var filteredQuaternion = IDENTITY
 	var filteringImpact = 0f
@@ -38,7 +42,7 @@ class QuaternionMovingAverage(
 		amount = amount.coerceAtLeast(0f)
 		if (type == TrackerFilters.SMOOTHING) {
 			// lower smoothFactor = more smoothing
-			smoothFactor = SMOOTH_MULTIPLIER * (1 - amount.coerceAtMost(1f)) + SMOOTH_MIN
+			smoothFactor = SMOOTH_MULTIPLIER * (1 - amount.coerceAtMost(1f)) + smoothMin.coerceAtLeast(0f)
 			// Totally a hack
 			if (amount > 1) {
 				smoothFactor /= amount
@@ -46,8 +50,9 @@ class QuaternionMovingAverage(
 		}
 		if (type == TrackerFilters.PREDICTION) {
 			// higher predictFactor = more prediction
-			predictFactor = PREDICT_MULTIPLIER * amount + PREDICT_MIN
-			rotBuffer = CircularArrayList(PREDICT_BUFFER)
+			predictFactor = predictMultiplier.coerceAtLeast(0f) * amount + predictMin.coerceAtLeast(0f)
+			// Keep the buffer size in a sane range to avoid memory/perf issues.
+			rotBuffer = CircularArrayList(predictBuffer.coerceIn(1, 120))
 		}
 
 		// We have no reference at the start, so just use the initial rotation

@@ -24,7 +24,11 @@ class TrackerFilteringHandler {
 			movingAverage = QuaternionMovingAverage(
 				type,
 				config.amount,
+				config.smoothMin,
 				currentRotation,
+				config.predictMin,
+				config.predictMultiplier,
+				config.predictBuffer,
 			)
 			filteringEnabled = true
 		} else {

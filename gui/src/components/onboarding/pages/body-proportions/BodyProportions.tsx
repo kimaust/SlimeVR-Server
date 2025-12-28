@@ -112,9 +112,16 @@ function ProportionItem({
   };
 
   const boneIncrement = (addition: number) => {
+    // Skeleton config values are stored in meters.
+    // For cm-based edits we quantize to 0.1cm (0.001m) to avoid accumulating float error.
+    const CM_QUANTIZE_M = 0.001;
+    const CM_QUANTIZE_SCALE = 1 / CM_QUANTIZE_M; // 1000
+
     const newValue =
       part.unit === 'cm'
-        ? (Math.round(part.value * 200) + addition * 2) / 200
+        ? (Math.round(part.value * CM_QUANTIZE_SCALE) +
+            Math.round(addition * 10)) /
+          CM_QUANTIZE_SCALE
         : // In the case of unit === percent we send only the added percent and not the value with added percent to it
           // this is so the percent added is relative to the whole group and not the bone as 1% added to the bone is not 1% of the group
           addition / 100;
@@ -212,16 +219,16 @@ function ProportionItem({
               {precise && (
                 <IncrementButton
                   bgDark={part.type !== 'group-part'}
-                  onClick={() => boneIncrement(-0.5)}
+                  onClick={() => boneIncrement(-0.1)}
                 >
-                  {configFormat.format(-0.5)}
+                  {configFormat.format(-0.1)}
                 </IncrementButton>
               )}
             </div>
             <div className="text-xl font-bold min-w-24 text-center">
               {part.unit === 'percent'
-                ? /* Make number rounding so it's based on .5 decimals */
-                  percentageFormat.format(Math.round(part.ratio * 200) / 200)
+                ? /* Make number rounding so it's based on .1 decimals */
+                  percentageFormat.format(Math.round(part.ratio * 1000) / 1000)
                 : cmFormat.format(part.value * 100)}
               {part.unit === 'percent' && (
                 <p className="text-standard">{`(${cmFormat.format(
@@ -235,9 +242,9 @@ function ProportionItem({
               {precise && (
                 <IncrementButton
                   bgDark={part.type !== 'group-part'}
-                  onClick={() => boneIncrement(+0.5)}
+                  onClick={() => boneIncrement(+0.1)}
                 >
-                  {configFormat.format(+0.5)}
+                  {configFormat.format(+0.1)}
                 </IncrementButton>
               )}
               <IncrementButton

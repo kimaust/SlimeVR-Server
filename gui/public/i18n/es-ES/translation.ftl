@@ -329,7 +329,7 @@ tracker-rotation-back = Trasero
 tracker-rotation-back_left = Trasero-Izquierdo
 tracker-rotation-back_right = Trasero-Derecho
 tracker-rotation-custom = Personalizado
-tracker-rotation-overriden = (anulado por el reinicio de montura)
+tracker-rotation-overriden = (anulado: { $angle }°)
 
 ## Tracker information
 
@@ -369,7 +369,7 @@ tracker-settings-use_mag = Permitir magnetómetro en este tracker
 # Multiline!
 tracker-settings-use_mag-description =
     ¿Debería este tracker usar el magnetómetro para reducir el drift cuando se permita el uso de este? <b>¡Por favor, no apague su tracker mientras activas esto!</b>
-    
+
     Primero debe permitir el uso del magnetómetro, <magSetting>haga clic aquí para ir a la configuración</magSetting>.
 tracker-settings-use_mag-label = Permitir magnetómetro
 # The .<name> means it's an attribute and it's related to the top key.
@@ -527,7 +527,7 @@ settings-general-tracker_mechanics-drift_compensation-prediction-label = Predicc
 settings-general-tracker_mechanics-drift_compensation_warning =
     <b>Advertencia:</b> Utilice la compensación de drift solo si necesita restablecer
     muy a menudo (cada ~5-10 minutos).
-    
+
     Algunas IMU propensas a restablecimientos frecuentes incluyen:
     Joy-Cons, owoTrack y MPUs (sin firmware reciente).
 settings-general-tracker_mechanics-drift_compensation_warning-cancel = Cancelar
@@ -714,9 +714,9 @@ settings-general-interface-discord_presence-message =
 settings-interface-behavior-error_tracking = Recopilación de errores a través de Sentry.io
 settings-interface-behavior-error_tracking-description_v2 =
     <h1>¿Da su consentimiento para la recopilación de datos de error anónimos?</h1>
-    
+
     <b>No recopilamos información personal</b> , como su dirección IP o credenciales inalámbricas. ¡SlimeVR valora tu privacidad!
-    
+
     Para proporcionar la mejor experiencia de usuario, recopilamos informes de errores anónimos, métricas de rendimiento e información del sistema operativo. Esto nos ayuda a detectar errores y problemas con SlimeVR. Estas métricas se recopilan a través de Sentry.io.
 settings-interface-behavior-error_tracking-label = Enviar errores a los desarrolladores
 settings-interface-behavior-bvh_directory = Directorio para guardar grabaciones BVH
@@ -923,20 +923,20 @@ onboarding-reset_tutorial-skip = Omitir paso
 # Cares about multiline
 onboarding-reset_tutorial-0 =
     Toque { $taps } veces el rastreador resaltado para activar el restablecimiento horizontal.
-    
+
     Esto hará que los trackers miren en la misma dirección que tu visor (HMD).
 # Cares about multiline
 onboarding-reset_tutorial-1 =
     Toque { $taps } veces el rastreador resaltado para activar el reinicio completo.
-    
+
     Para ello es necesario estar de pie (pose i). Hay un retraso de 3 segundos (configurable) antes de que realmente suceda.
     Esto restablece completamente la posición y la rotación de todos sus trackers. Debería solucionar la mayoría de los problemas.
 # Cares about multiline
 onboarding-reset_tutorial-2 =
     Toque { $taps } veces el tracker resaltado para activar el restablecimiento de montura.
-    
+
     El restablecimiento de montura ayuda en cómo los trackers están realmente colocados en ti, así que si accidentalmente los moviste y cambiaste su orientación por una gran cantidad, esto ayudará.
-    
+
     Necesitas estar en una pose como si estuvieras esquiando como se muestra en el asistente de montaje automático y tienes un retraso de 3 segundos (configurable) antes de que se active.
 
 ## Setup start
@@ -1419,7 +1419,7 @@ tray_or_exit_modal-title = ¿Qué debe hacer el botón de cierre?
 # Multiline text
 tray_or_exit_modal-description =
     Esto te permite elegir si quieres salir de la aplicación o minimizarlo a la bandeja al pulsar el botón de cerrar.
-    
+
     ¡Puedes cambiar esto más tarde en la configuración de la interfaz!
 tray_or_exit_modal-radio-exit = Salir al cerrar
 tray_or_exit_modal-radio-tray = Minimizar a la bandeja
@@ -1480,7 +1480,7 @@ vrc_config-avatar_measurement_type-ARM_SPAN = Amplitud de los brazos
 error_collection_modal-title = ¿Podemos recopilar errores?
 error_collection_modal-description_v2 =
     { settings-interface-behavior-error_tracking-description_v2 }
-    
+
     Puede cambiar esta configuración más adelante en la sección Comportamiento de la página de configuración.
 error_collection_modal-confirm = Acepto
 error_collection_modal-cancel = No quiero

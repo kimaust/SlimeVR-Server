@@ -306,7 +306,7 @@ function PreciseToggle({ control }: { control: ManualProportionControls }) {
             </IconButton>
           ) : (
             <IconButton
-              icon={<div className="text-xl font-bold">+0.5</div>}
+              icon={<div className="text-xl font-bold">+0.1</div>}
               onClick={() => onChange(!value)}
             >
               <Localized id="onboarding-manual_proportions-precise_increment">

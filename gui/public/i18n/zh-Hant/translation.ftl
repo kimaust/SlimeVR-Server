@@ -364,7 +364,7 @@ tracker-rotation-back = 後
 tracker-rotation-back_left = 左後方
 tracker-rotation-back_right = 右後方
 tracker-rotation-custom = 自訂
-tracker-rotation-overriden = （本設定已被配戴重置覆蓋）
+tracker-rotation-overriden = （已覆蓋: { $angle }°）
 
 ## Tracker information
 
@@ -404,7 +404,7 @@ tracker-settings-use_mag = 允許使用這個追蹤器的磁力計
 # Multiline!
 tracker-settings-use_mag-description =
     如果「在追蹤器上啟用磁力計」功能已開啟，是否要在這個追蹤器上啟用它來減緩偏移？<b>切換本選項時請勿關閉追蹤器的電源！</b>
-    
+
     請先開啟「在追蹤器上啟用磁力計」功能，<magSetting>點選此處以移動至該設定</magSetting>。
 tracker-settings-use_mag-label = 允許使用這個追蹤器的磁力計
 # The .<name> means it's an attribute and it's related to the top key.
@@ -572,7 +572,7 @@ settings-general-tracker_mechanics-drift_compensation-prediction-label = 偏移�
 settings-general-tracker_mechanics-drift_compensation_warning =
     <b>警告：</b> 只有在需要頻繁重置（約 5~10 分鐘重置一次）
     的時候才開啟此選項。
-    
+
     容易頻繁重置的 IMU 包括：
     Joy-Con、owoTrack、MPU（非近期韌體）。
 settings-general-tracker_mechanics-drift_compensation_warning-cancel = 取消
@@ -754,9 +754,9 @@ settings-general-interface-discord_presence-message =
 settings-interface-behavior-error_tracking = 透過 Sentry.io 收集錯誤資訊
 settings-interface-behavior-error_tracking-description_v2 =
     <h1>你是否同意我們蒐集匿名化的錯誤資料？</h1>
-    
+
     <b>我們不會收集個人資訊</b> ，例如你的 IP 位址或無線網路認證資訊。SlimeVR 重視你的隱私！
-    
+
     為了提供最佳的使用者體驗，我們會蒐集匿名化的錯誤報告、性能指標和作業系統資訊，這會對我們檢測 SlimeVR 的錯誤和問題有所幫助。我們會透過 Sentry.io 來蒐集這些指標。
 settings-interface-behavior-error_tracking-label = 向開發者傳送錯誤資訊
 settings-interface-behavior-bvh_directory = BVH 紀錄儲存目錄
@@ -971,20 +971,20 @@ onboarding-reset_tutorial-skip = 跳過本步驟
 # Cares about multiline
 onboarding-reset_tutorial-0 =
     對所標記之追蹤器敲擊 { $taps } 次即可觸發左右偏擺重置。
-    
+
     追蹤器將會調整與頭戴顯示器所面對的方向一致。
 # Cares about multiline
 onboarding-reset_tutorial-1 =
     對所標記之追蹤器敲擊 { $taps } 次即可觸發完整重置。
-    
+
     做此校正時必須站直，觸發 3 秒後（可修改）才會真正進行重置。
     追蹤器的定位與旋轉將會被完全重置，應該可以解決大多數的問題。
 # Cares about multiline
 onboarding-reset_tutorial-2 =
     對所標記之追蹤器敲擊 { $taps } 次即可觸發配戴重置。
-    
+
     配戴重置能對追蹤器實際的配戴方式進行調整，因此若你不小心移動到追蹤器，或是大幅度的變更配戴方向，這個功能會有所幫助。
-    
+
     做此校正時需要進行滑雪姿勢，如自動配戴校正的畫面所示。在觸發 3 秒後（可修改）才會真正進行重置。
 
 ## Setup start
@@ -1516,7 +1516,7 @@ tray_or_exit_modal-title = 關閉視窗的動作是什麼？
 # Multiline text
 tray_or_exit_modal-description =
     你可以選擇在關閉視窗時，一併退出伺服器程式，或是將視窗最小化到系統列圖示中。
-    
+
     本設定之後也可以在使用者介面設定中更改。
 tray_or_exit_modal-radio-exit = 退出 SlimeVR
 tray_or_exit_modal-radio-tray = 最小化到系統列
@@ -1577,7 +1577,7 @@ vrc_config-avatar_measurement_type-ARM_SPAN = 臂展
 error_collection_modal-title = 我們可以蒐集錯誤資訊嗎？
 error_collection_modal-description_v2 =
     { settings-interface-behavior-error_tracking-description_v2 }
-    
+
     若之後要變更此設定，可以在「詳細設定」頁面中的「行為」來變更。
 error_collection_modal-confirm = 我同意
 error_collection_modal-cancel = 我不想要

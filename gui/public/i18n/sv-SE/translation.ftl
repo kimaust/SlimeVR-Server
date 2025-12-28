@@ -339,7 +339,7 @@ tracker-rotation-back = Bak
 tracker-rotation-back_left = Bak-väster
 tracker-rotation-back_right = Bak-höger
 tracker-rotation-custom = Egenanpassad
-tracker-rotation-overriden = (åsidosätts genom återställning av montering)
+tracker-rotation-overriden = (åsidosätts: { $angle }°)
 
 ## Tracker information
 
@@ -379,7 +379,7 @@ tracker-settings-use_mag = Aktivera magnetometer på denna sensorn.
 # Multiline!
 tracker-settings-use_mag-description =
     Ska denna sensorn använda magnetometern för att minska drift när magnetometer-användning är tillåten? <b> Var vänlig och stäng inte av sensorn när du växlar av och på denna inställningen! <b>
-    
+
     Du behöver tillåta magnetometer-användning först <magSetting> klicka här för att gå till inställningen </magSetting>.
 tracker-settings-use_mag-label = Tillåt magnetometer
 # The .<name> means it's an attribute and it's related to the top key.
@@ -683,9 +683,9 @@ settings-general-interface-discord_presence-label = Dela aktivitet på Discord
 settings-interface-behavior-error_tracking = Error samling via Sentry.io
 settings-interface-behavior-error_tracking-description_v2 =
     <h1>Tillåter du samlingen av anonym error-data?</h1>
-    
+
     <b>Vi samlar inte personlig information</b> så som din IP adress eller trådlösa referenser. Slimevr värdesätter din integritet!
-    
+
     För att tillhandhålla den bästa användarupplevelsen, så samlar vi anonyma error-raporter, prestandamått och operativsystems-info. Detta hjälper oss upptäcka buggar och problem med Slimevr. Dessa rapporterna samlas via Sentry.io.
 settings-interface-behavior-error_tracking-label = Skicka errors till utväcklare
 
@@ -866,7 +866,7 @@ onboarding-reset_tutorial-skip = Hoppa över steg
 # Cares about multiline
 onboarding-reset_tutorial-0 =
     Tryck { $taps } gånger på den markerade trackern för att utlösa yaw reset.
-    
+
     Detta gör att spårarna vänds i samma riktning som ditt headset (HMD).
 
 ## Setup start
@@ -1243,7 +1243,7 @@ vrc_config-avatar_measurement_type-ARM_SPAN = Armspann
 error_collection_modal-title = Kan vi samla errors?
 error_collection_modal-description_v2 =
     { settings-interface-behavior-error_tracking-description_v2 }
-    
+
     Du kan ändra denna inställningen senare i beteende-sektionen av inställnings-sidan
 error_collection_modal-confirm = Jag tillåter.
 error_collection_modal-cancel = Jag vill inte
