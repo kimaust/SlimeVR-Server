@@ -112,9 +112,11 @@ class Tracker @JvmOverloads constructor(
 	val trackerFlexHandler: TrackerFlexHandler = TrackerFlexHandler(this)
 	var batteryVoltage: Float? = null
 	var batteryLevel: Float? = null
+	var batteryRemainingRuntime: Long? = null
 	var ping: Int? = null
 	var signalStrength: Int? = null
 	var temperature: Float? = null
+	var button: Int? = null
 	var customName: String? = null
 	var magStatus: MagnetometerStatus = magStatus
 		private set
@@ -316,7 +318,7 @@ class Tracker @JvmOverloads constructor(
 		rot = Quaternion.rotationAroundYAxis(stayAligned.yawCorrection.toRad()) * rot
 
 		// Reset if needed and is not computed and internal
-		return if (needReset && !(isComputed && isInternal) && trackerDataType == TrackerDataType.ROTATION) {
+		return if (allowReset && !(isComputed && isInternal) && trackerDataType == TrackerDataType.ROTATION) {
 			// Adjust to reset, mounting and drift compensation
 			resetsHandler.getReferenceAdjustedDriftRotationFrom(rot)
 		} else {

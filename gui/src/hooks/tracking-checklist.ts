@@ -10,6 +10,7 @@ import {
 } from 'solarxr-protocol';
 import { useWebsocketAPI } from './websocket-api';
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import * as Sentry from '@sentry/react';
 
 export const trackingchecklistIdtoLabel: Record<TrackingChecklistStepId, string> = {
   [TrackingChecklistStepId.UNKNOWN]: '',
@@ -91,8 +92,16 @@ export type Steps = {
   visibleSteps: TrackingChecklistStep[];
   ignoredSteps: TrackingChecklistStepId[];
 };
+
+const filterActive =
+  (ignoredSteps: TrackingChecklistStepId[]) => (step: TrackingChecklistStepT) =>
+    !ignoredSteps.includes(step.id) && step.enabled;
+
 export function provideTrackingChecklist() {
   const { sendRPCPacket, useRPCPacket } = useWebsocketAPI();
+  const [sessionIgnoredSteps, setSessionIgnoredSteps] = useState<
+    TrackingChecklistStepId[]
+  >([]);
   const [steps, setSteps] = useState<Steps>({
     steps: [],
     visibleSteps: [],
@@ -103,7 +112,7 @@ export function provideTrackingChecklist() {
     RpcMessage.TrackingChecklistResponse,
     (data: TrackingChecklistResponseT) => {
       const activeSteps = data.steps.filter(
-        (step) => !data.ignoredSteps.includes(step.id) && step.enabled
+        filterActive([...data.ignoredSteps, ...sessionIgnoredSteps])
       );
       setSteps({
         steps: data.steps,
@@ -160,23 +169,48 @@ export function provideTrackingChecklist() {
     [steps]
   );
 
-  const ignoreStep = (step: TrackingChecklistStepId, ignore: boolean) => {
-    const res = new IgnoreTrackingChecklistStepRequestT();
-    res.stepId = step;
-    res.ignore = ignore;
-    sendRPCPacket(RpcMessage.IgnoreTrackingChecklistStepRequest, res);
+  const ignoreStep = (
+    step: TrackingChecklistStepId,
+    ignore: boolean,
+    session = true
+  ) => {
+    setSessionIgnoredSteps((curr) => {
+      if (ignore && !curr.includes(step)) return [...curr, step];
+      if (!ignore && curr.includes(step)) {
+        curr.splice(curr.indexOf(step), 1);
+        return curr;
+      }
+      return curr;
+    });
+    Sentry.metrics.count(ignore ? 'mute_checklist_step' : 'unmute_checklist_step', 1, {
+      attributes: { step: TrackingChecklistStepId[step], session },
+    });
+    if (session) {
+      // Force refresh of the flightlist when ignoring a step as the filtering
+      // is done only in one place to simplify the data flow
+      sendRPCPacket(
+        RpcMessage.TrackingChecklistRequest,
+        new TrackingChecklistRequestT()
+      );
+    } else {
+      const res = new IgnoreTrackingChecklistStepRequestT();
+      res.stepId = step;
+      res.ignore = ignore;
+      sendRPCPacket(RpcMessage.IgnoreTrackingChecklistStepRequest, res);
+    }
   };
 
   return {
     ...steps,
+    sessionIgnoredSteps,
     firstRequired,
     highlightedTrackers,
     progress,
     completion,
     warnings,
     ignoreStep,
-    toggle: (step: TrackingChecklistStepId) =>
-      ignoreStep(step, !steps.ignoredSteps.includes(step)),
+    toggleSession: (step: TrackingChecklistStepId) =>
+      ignoreStep(step, !sessionIgnoredSteps.includes(step)),
   };
 }
 

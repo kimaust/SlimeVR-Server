@@ -54,17 +54,11 @@ export function TrackingChecklistSettings({
       // doing it this way prevents calling ignore step for every step.
       // that prevent sending a packet for steps that didnt change
       if (!value && !ignoredSteps.includes(stepId)) {
-        ignoreStep(stepId, true);
-        Sentry.metrics.count('mute_checklist_step', 1, {
-          attributes: { step: TrackingChecklistStepId[stepId] },
-        });
+        ignoreStep(stepId, true, false);
       }
 
       if (value && ignoredSteps.includes(stepId)) {
-        ignoreStep(stepId, false);
-        Sentry.metrics.count('unmute_checklist_step', 1, {
-          attributes: { step: TrackingChecklistStepId[stepId] },
-        });
+        ignoreStep(stepId, false, false);
       }
     }
   };

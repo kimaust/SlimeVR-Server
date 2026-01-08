@@ -24,6 +24,7 @@ interface TooltipProps {
   disabled?: boolean;
   tag?: string;
   spacing?: number;
+  bindTo?: string;
 }
 
 interface TooltipPos {
@@ -344,9 +345,13 @@ export function DrawerTooltip({
       elem.classList.add(classNames('animate-pulse'));
       elem.classList.add(classNames('scale-[110%]'));
       elem.classList.add(classNames('duration-500'));
-      touchTimeout.current = setTimeout(() => {
+      if (elem.hasAttribute('disabled')) {
         open();
-      }, TOOLTIP_DELAY) as unknown as number;
+      } else {
+        touchTimeout.current = setTimeout(() => {
+          open();
+        }, TOOLTIP_DELAY) as unknown as number;
+      }
     }
   };
 
@@ -360,12 +365,16 @@ export function DrawerTooltip({
   };
 
   const touchEnd = (e: MouseEvent | TouchEvent) => {
-    if (Date.now() - touchTimestamp.current > TOOLTIP_DELAY) {
-      // open drawer
-      e.preventDefault(); // cancel the click event
+    if (
+      e.currentTarget instanceof HTMLButtonElement &&
+      e.currentTarget.hasAttribute('disabled')
+    ) {
+      e.preventDefault();
+      return;
+    }
+    if (Date.now() - touchTimestamp.current < TOOLTIP_DELAY) {
       clearTimeout(touchTimeout.current);
-
-      open();
+      close();
     }
   };
 
@@ -394,12 +403,14 @@ export function DrawerTooltip({
 
       elem.addEventListener('touchstart', touchStart);
       elem.addEventListener('touchend', touchEnd);
+      elem.addEventListener('touchcancel', touchEnd);
 
       return () => {
         elem.removeEventListener('scroll', scroll);
 
         elem.removeEventListener('touchstart', touchStart);
         elem.removeEventListener('touchend', touchEnd);
+        elem.removeEventListener('touchcancel', touchEnd);
         clearTimeout(touchTimeout.current);
       };
     }
@@ -458,10 +469,15 @@ export function Tooltip({
   variant = 'auto',
   disabled = false,
   tag = 'div',
+  bindTo,
   spacing = 10,
 }: TooltipProps) {
   const childRef = useRef<HTMLElement | null>(null);
   const isAndroid = window.__ANDROID__?.isThere();
+
+  if (bindTo) {
+    childRef.current = document.querySelector(bindTo);
+  }
 
   let portal = null;
   if (variant === 'auto') {
@@ -498,7 +514,13 @@ export function Tooltip({
 
   return (
     <>
-      {createElement(tag, { className: 'contents', ref: childRef }, children)}
+      {bindTo
+        ? children
+        : createElement(
+            tag,
+            { className: 'contents', ref: childRef },
+            children
+          )}
       {!disabled && createPortal(portal, document.body)}
     </>
   );

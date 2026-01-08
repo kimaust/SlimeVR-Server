@@ -27,6 +27,7 @@ class HIDCommon {
 	companion object {
 		const val HID_TRACKER_RECEIVER_VID = 0x1209
 		const val HID_TRACKER_RECEIVER_PID = 0x7690
+		const val HID_TRACKER_PID = 0x7692
 
 		const val PACKET_SIZE = 16
 
@@ -138,11 +139,13 @@ class HIDCommon {
 			}
 
 			// Packet data
+			var runtime: Long? = null
 			var batt: Int? = null
 			var batt_v: Int? = null
 			var temp: Int? = null
 			var brd_id: Int? = null
 			var mcu_id: Int? = null
+			var button: Int? = null
 			// var imu_id: Int? = null
 			// var mag_id: Int? = null
 			var fw_date: Int? = null
@@ -220,11 +223,42 @@ class HIDCommon {
 					}
 				}
 
+				5 -> { // runtime
+					// ulong as little endian
+					runtime = (dataReceived[i + 9].toUByte().toLong() shl 56) or (dataReceived[i + 8].toUByte().toLong() shl 48) or (dataReceived[i + 7].toUByte().toLong() shl 40) or (dataReceived[i + 6].toUByte().toLong() shl 32) or (dataReceived[i + 5].toUByte().toLong() shl 24) or (dataReceived[i + 4].toUByte().toLong() shl 16) or (dataReceived[i + 3].toUByte().toLong() shl 8) or dataReceived[i + 2].toUByte().toLong()
+				}
+
+				6 -> { // data
+					button = dataReceived[i + 2].toUByte().toInt()
+					rssi = dataReceived[i + 15].toUByte().toInt()
+				}
+
+				7 -> { // reduced precision quat and accel with data
+					button = dataReceived[i + 2].toUByte().toInt()
+					// quaternion is quantized as exponential map
+					// X = 10 bits, Y/Z = 11 bits
+					val buffer = ByteBuffer.wrap(dataReceived, i + 5, 4)
+					buffer.order(java.nio.ByteOrder.LITTLE_ENDIAN)
+					val q_buf = buffer.getInt().toUInt()
+					q[0] = (q_buf and 1023u).toInt()
+					q[1] = (q_buf shr 10 and 2047u).toInt()
+					q[2] = (q_buf shr 21 and 2047u).toInt()
+					for (j in 0..2) { // accel received as fixed 7, in m/s^2
+						// Q7 as short little endian
+						a[j] = dataReceived[i + 9 + j * 2 + 1].toInt() shl 8 or dataReceived[i + 9 + j * 2].toUByte().toInt()
+					}
+					rssi = dataReceived[i + 15].toUByte().toInt()
+				}
+
 				else -> {
 				}
 			}
 
 			// Assign data
+			if (runtime != null && runtime >= 0) {
+				tracker.batteryRemainingRuntime = runtime
+			}
+			// -1: Not known (e.g. not yet calculated after wake up, reusing known value is okay), 0: N/A (e.g. charging)
 			if (batt != null) {
 				tracker.batteryLevel = if (batt == 128) 1f else (batt and 127).toFloat()
 			}
@@ -248,12 +282,23 @@ class HIDCommon {
 					device.mcuType = mcuType!!
 				}
 			}
-			if (fw_date != null && fw_major != null && fw_minor != null && fw_patch != null) {
+			if (button != null) {
+				if (tracker.button == null) {
+					tracker.button = 0
+				}
+				if (button != tracker.button) {
+					button = button and tracker.button!!.inv()
+					// Nothing to do now..
+				}
+			}
+			if (fw_date != null) {
 				val firmwareYear = 2020 + (fw_date shr 9 and 127)
 				val firmwareMonth = fw_date shr 5 and 15
 				val firmwareDay = fw_date and 31
-				val firmwareDate = String.format("%04d-%02d-%02d", firmwareYear, firmwareMonth, firmwareDay)
-				device.firmwareVersion = "$fw_major.$fw_minor.$fw_patch (Build $firmwareDate)"
+				device.firmwareDate = String.format("%04d-%02d-%02d", firmwareYear, firmwareMonth, firmwareDay)
+			}
+			if (fw_major != null && fw_minor != null && fw_patch != null) {
+				device.firmwareVersion = "$fw_major.$fw_minor.$fw_patch"
 			}
 			if (svr_status != null) {
 				val status = TrackerStatus.getById(svr_status)
@@ -274,7 +319,7 @@ class HIDCommon {
 				rot = AXES_OFFSET.times(scaleRot).times(rot) // no division
 				tracker.setRotation(rot)
 			}
-			if (packetType == 2) {
+			if (packetType == 2 || packetType == 7) {
 				val v = floatArrayOf(q[0].toFloat(), q[1].toFloat(), q[2].toFloat()) // used q array for quantized data
 				v[0] /= (1 shl 10).toFloat()
 				v[1] /= (1 shl 11).toFloat()
@@ -293,7 +338,7 @@ class HIDCommon {
 				rot = AXES_OFFSET.times(rot) // no division
 				tracker.setRotation(rot)
 			}
-			if (packetType == 1 || packetType == 2) {
+			if (packetType == 1 || packetType == 2 || packetType == 7) {
 				// Acceleration is in local device frame
 				// On flat surface / face up:
 				// Right side of the device is +X
@@ -317,7 +362,7 @@ class HIDCommon {
 				val magnetometer = Vector3(m[0].toFloat(), m[1].toFloat(), m[2].toFloat()).times(scaleMag) // no division
 				tracker.setMagVector(magnetometer)
 			}
-			if (packetType == 1 || packetType == 2 || packetType == 4) {
+			if (packetType == 1 || packetType == 2 || packetType == 4 || packetType == 7) {
 				tracker.dataTick() // only data tick if there is rotation data
 			}
 		}
