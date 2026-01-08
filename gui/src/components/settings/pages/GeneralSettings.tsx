@@ -1,5 +1,5 @@
 import { Localized, useLocalization } from '@fluent/react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { DefaultValues, useForm } from 'react-hook-form';
 import {
   ChangeSettingsRequestT,
@@ -212,7 +212,7 @@ export function GeneralSettings() {
   const isPredictionSelected =
     Number(filteringType) === FilteringType.PREDICTION;
 
-  const onSubmit = useCallback((values: SettingsForm) => {
+  const onSubmit = (values: SettingsForm) => {
     const settings = new ChangeSettingsRequestT();
 
     if (values.trackers) {
@@ -318,21 +318,12 @@ export function GeneralSettings() {
     }
 
     sendRPCPacket(RpcMessage.ChangeSettingsRequest, settings);
-  }, [sendRPCPacket]);
-
-  // Prevent "auto-save" from firing while we are syncing initial values from the server,
-  // since that can re-apply filtering/skeleton settings and cause a noticeable pose jump.
-  const hasLoadedSettingsRef = useRef(false);
-  const syncingFromServerRef = useRef(false);
+  };
 
   useEffect(() => {
-    const subscription = watch(() => {
-      if (!hasLoadedSettingsRef.current) return;
-      if (syncingFromServerRef.current) return;
-      handleSubmit(onSubmit)();
-    });
+    const subscription = watch(() => handleSubmit(onSubmit)());
     return () => subscription.unsubscribe();
-  }, [handleSubmit, onSubmit, watch]);
+  }, []);
 
   useEffect(() => {
     sendRPCPacket(RpcMessage.SettingsRequest, new SettingsRequestT());
@@ -458,10 +449,7 @@ export function GeneralSettings() {
       );
     }
 
-    syncingFromServerRef.current = true;
     reset({ ...getValues(), ...formData });
-    hasLoadedSettingsRef.current = true;
-    syncingFromServerRef.current = false;
   });
 
   useEffect(() => {
